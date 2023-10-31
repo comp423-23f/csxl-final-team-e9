@@ -19,6 +19,9 @@
    Story C.
    As Amy Ambassador, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.
 
+   Story D.
+   As Sally Student, if I do not want to spend 2 hours in the CSXL Lab, I should be able to input the time I want to spend in CSXL Lab.
+
 4. Wireframes / Mockups: Include rough wireframes of your feature’s user interfaces for the most critical user stories, along with brief descriptions of what is going on. These can be hand-drawn, made in PowerPoint/KeyNote, or created with a tool like Figma. To see an example of a detailed wireframe Kris made this summer before building the drop-in feature, see this Figma board. You will notice the final implementation is not 1:1 with the original wireframe!
 
 5. Technical Implementation Opportunities and Planning
