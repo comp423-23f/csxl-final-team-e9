@@ -17,7 +17,7 @@
    As Sally Student, if the time slot following mine is originally reserved, but that reservation is cancelled, the option to extend should reappear.
 
    Story C.
-   As Amy Ambassador, if the following time slot is open, I want the ability to extend the reservation on behalf of Sally Student.
+   As Amy Ambassador, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.
 
 4. Wireframes / Mockups: Include rough wireframes of your feature’s user interfaces for the most critical user stories, along with brief descriptions of what is going on. These can be hand-drawn, made in PowerPoint/KeyNote, or created with a tool like Figma. To see an example of a detailed wireframe Kris made this summer before building the drop-in feature, see this Figma board. You will notice the final implementation is not 1:1 with the original wireframe!
 
