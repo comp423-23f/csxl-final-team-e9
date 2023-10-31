@@ -11,7 +11,7 @@
 3. User Stories organized by persona, necessity for a minimum-viable feature, and frequency/importance of use.
 
    Story A.
-   As Sally Student, if the following time slot is open, I want the ability to extend my drop-in seat reservation by 1 hour. If the following time slot is reserved, I to know that I cannot extend and see the time remaining on my reservation.
+   As Sally Student, if the following time slot is open, I want the ability to extend my drop-in seat reservation by 1 hour. If the following time slot is reserved, I to know that I cannot extend and see the time remaining on my reservation. Then, the reservation can be increased in increments of 15 minutes up to 1 hour.
 
    Story B.
    As Sally Student, if the time slot following mine is originally reserved, but that reservation is cancelled, the option to extend should reappear.
@@ -20,7 +20,7 @@
    As Amy Ambassador, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.
 
    Story D.
-   As Sally Student, if I do not want to spend 2 hours in the CSXL Lab, I should be able to input the time I want to spend in CSXL Lab.
+   As Sally Student, if I want to spend more or less time in the CSXL Lab than my reservation is automatically calculated for, I should be able to alter the time slots of my reservation. The initial maximum time I can spend in the CSXL Lab is two hours and the minimum time I can spend is 15 minutes.
 
 4. Wireframes / Mockups: Include rough wireframes of your feature’s user interfaces for the most critical user stories, along with brief descriptions of what is going on. These can be hand-drawn, made in PowerPoint/KeyNote, or created with a tool like Figma. To see an example of a detailed wireframe Kris made this summer before building the drop-in feature, see this Figma board. You will notice the final implementation is not 1:1 with the original wireframe!
 
