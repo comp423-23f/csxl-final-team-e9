@@ -28,6 +28,18 @@ As Sally Student, if I want to spend more or less time in the CSXL Lab than my r
 
 ## Wireframes
 
+![Make Reservation](images/wireframe/make_res.png)
+
+![Confirm Reservation](images/wireframe/confirm_res_inital.png)
+
+![Confirm Reservation - Pre - Unavailable](images/wireframe/confirm_res_pre_UA.png)
+
+![Confirm Reservation - Post - Unavailable](images/wireframe/confirm_res_post_UA.png)
+
+![Confirm Reservation - Post - Available](images/wireframe/confirm_res_post_A.png)
+
+![Extend Reservation](images/wireframe/extend_res.png)
+
 Based on our wireframe, the initial landing page in the CSXL Lab is titled "Make a Reservation." Here, we have integrated image icons alongside key information such as "First Name," "Last Name," "Sitterson 011," "Monitor #," the date, and start-stop clock icons. These enhancements not only add to the visual appeal of the website, but also provide the users with more intuitive information compared to the original CSXL Reservation page. We have separated the "Confirm" button and the "Time Remaining to Cancel" feature to make it more user friendly and conform to industry's standards.
 
 Moving on to the second page, "Reservation Confirmation," users are presented with text labels along with image icons, including "First Name," "Last Name," "Sitterson 011," "Monitor #," "Day and Date," and "Start and End Time." On this page, users have the option to click the button “Extend” in order to extend their reservation. This extend button should be available to click and blue only when there is 30 minutes left in the current reservation. Otherwise, the extend button will be greyed out if the student cannot extend the reservation because someone has reserved a seat or if there are more than 30 minutes left in the current reservation. This design decision aligns with a logical user flow, because the option to edit should follow the reservation confirmation since it is the final page the user has open.
