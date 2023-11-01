@@ -1,42 +1,53 @@
-0. Extending a Drop-in Reservation : Isha Atre, Chloe Carroll, Lauren Jones, Soumya Mahavadi
+# Feature: Extending a Drop-in Reservation
 
-1. Overview: This feature allows students who are currently in a drop-in reservation to extend for 1 additional hour if no other student has a reservation immediately after.
+> Written by Isha Atre, Chloe Carroll, Lauren Jones, and Soumya Mahavadi<br> > _Last Updated: 11/01/2023_
 
-2. Key Personas: Describe the key personas your feature serves. What are their needs and goals with your feature?
+## Overview
 
-   Sally Student - wants to know if her drop-in reservation can be extended and the ability to extend by 1 hour if so.
+This feature allows students who have 30 minutes or less left in their current drop-in reservation to be able to extend it for up to an additional hour, only if no other student has reserved their current seat immediately after.
 
-   Amy Ambassador - wants the ability to extend Sally Student's drop-in reservation if there's no reservation following it.
+## Key Personas
 
-3. User Stories organized by persona, necessity for a minimum-viable feature, and frequency/importance of use.
+**Sally Student** wants to know if her drop-in reservation can be extended and have the ability to extend it by up to an hour if so.
 
-   Story A.
-   As Sally Student, if the following time slot is open, I want the ability to extend my drop-in seat reservation by 1 hour. If the following time slot is reserved, I to know that I cannot extend and see the time remaining on my reservation. Then, the reservation can be increased in increments of 15 minutes up to 1 hour.
+**Amy Ambassador** wants the ability to extend Sally Student's drop-in reservation if there is no reservation immediately following it.
 
-   Story B.
-   As Sally Student, if the time slot following mine is originally reserved, but that reservation is cancelled, the option to extend should reappear.
+## User Stories
 
-   Story C.
-   As Amy Ambassador, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.
+**Story A:**
+As Sally Student, if the following time slot for my current seat is available, I want the ability to extend my drop-in seat reservation by up to 1 additional hour, in increments of 15 minutes. If the following time slot is reserved, I want to know that I cannot extend and see the time remaining on my reservation.
 
-   Story D.
-   As Sally Student, if I want to spend more or less time in the CSXL Lab than my reservation is automatically calculated for, I should be able to alter the time slots of my reservation. The initial maximum time I can spend in the CSXL Lab is two hours and the minimum time I can spend is 15 minutes.
+**Story B:**
+As Sally Student, if the time slot following mine is originally reserved, but that reservation is cancelled, the option to extend my current reservation should reappear.
 
-4. Wireframes / Mockups: Include rough wireframes of your feature’s user interfaces for the most critical user stories, along with brief descriptions of what is going on. These can be hand-drawn, made in PowerPoint/KeyNote, or created with a tool like Figma. To see an example of a detailed wireframe Kris made this summer before building the drop-in feature, see this Figma board. You will notice the final implementation is not 1:1 with the original wireframe!
+**Story C:**
+As Amy Ambassador, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.
 
-5. Technical Implementation Opportunities and Planning
+**Story D:**
+As Sally Student, if I want to spend more or less time in the CSXL Lab than my reservation is automatically calculated for, I want to be able to alter the time slots of my reservation. The initial reservation should be between 15 minutes and 2 hours.
 
-What specific areas of the existing code base will you directly depend upon, extend, or integrate with?
+## Wireframes
 
-    Currently, drop-in reservations are limited to 2-hour periods. When a drop-in reservation’s end time is within the next 30 minutes, another student is able to claim the next turn on the seat by creating a drop-in reservation that starts between 1 and 30 minutes into the future.
+## Technical Implementation Opportunities and Planning
 
-What planned page components and widgets, per the assigned reading, do you anticipate needing in your feature’s frontend?
+**What specific areas of the existing code base will you directly depend upon, extend, or integrate with?**
 
-    An icon (green?) if extending is permitted. If not, a progress spinner or clock to show time remaining on the reservation.
+    We'll directly depend upon the reservation models defined in backend/models/coworking/reservation.py as well as the API routes to retrieve and update existing reservations. Ideally, we'd like to utilize the update_reservation method in backend/api/coworking/reservation.py, but because entending should route the user to a new page, we may have to create a new one with a route involving the extension page rather than @api.put("/reservation/{id}", tags=["Coworking"]). 
 
-What additional models, or changes to existing models, do you foresee needing (if any)?
-Considering your most-frequently used and critical user stories, what API / Routes do you foresee modifying or needing to add?
+    In the frontend, we will be adding a new extension component which will have a route from the current reservation component. We will also need to extend the current widgets used for the reservation card. We plan to add an extend method within the ReservationService located at frontend/src/app/coworking/reservation/reservation.service.ts.
 
-What concerns exist for security and privacy of data? Should the capabilities you are implementing be specific to only certain users or roles?
+**What planned page components and widgets, per the assigned reading, do you anticipate needing in your feature’s frontend?**
 
-    When Sally Student makes a reservation, only Sally Student or Amy Ambassador should be able to cancel or extend the reservation. Other students should not be able to cancel or extend Sally's reservation. If Sally attempts to extend but cannot, she should not be able to see who has a reservation after her, just that there is a student who reserved the following time slot. Only Amy Ambassador should be able to see which students have current/scheduled reservations.
+    First, we anticipate editing the coworking-reservation-card located at frontend/src/app/coworking/widgets/coworking-reservation-card by adding an "extend" button that would only show up if an extension was permitted, as well as a countdown timer to reveal how much time is left in Sally Student's current reservation. We also plan to add a new page component for an extension form/page that Sally Student can navigate to if an extension is permitted, so that they can decide how much time to extend their current reservation by. In addition, we plan on adding a time picker widget (https://m3.material.io/components/time-pickers/overview, https://stackoverflow.com/questions/45791339/how-to-implement-a-datetime-picker-in-ionic-2-to-select-time-range) to coworking-reservation-card to improve the current UI in terms of selecting start and end times when creating a new reservation.
+
+**What additional models, or changes to existing models, do you foresee needing (if any)?**
+
+    We do not foresee the need to create or change any models for this feature. We plan to utilize the ReservationDetails class predefined in backend/models/coworking/reservation.py, which already contains three attributes concerning extensions that are needed for our feature. We can use the SeatAvailability class located in backend/models/coworking/availability.py to determine whether or not Sally Student's seat is reserved for the next time slot. For Story D, we plan to update the current functionality of creating reservations to allow students to be able to reserve a seat for up to 2 hours in increments of 15 minutes. However, this will not require a change to the existing backend reservation model since the ReservationPartial class has fields to store the start and end times of the reservation.
+
+**Considering your most-frequently used and critical user stories, what API / Routes do you foresee modifying or needing to add?**
+
+    We foresee calling upon the PUT API route found in backend/api/coworking/reservation.py to update Sally Student's current reservation with a new end time when they request an extension. We will also need a new route in the frontend for the extension page component we will add.
+
+**What concerns exist for security and privacy of data? Should the capabilities you are implementing be specific to only certain users or roles?**
+
+    When Sally Student makes a reservation, only Sally Student and Amy Ambassador should be able to cancel or extend the reservation. Other students should not be able to cancel, extend, or even view Sally Student's reservation. If Sally Student wants to extend their reservation but cannot because the next time slot is already reserved by another student, Sally should not be able to see exactly who has a reservation after them, just that they cannot extend theirs. Only Amy Ambassador should be able to see which students have current and scheduled reservations.
