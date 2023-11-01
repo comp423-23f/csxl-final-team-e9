@@ -28,17 +28,18 @@ As Sally Student, if I want to spend more or less time in the CSXL Lab than my r
 
 ## Wireframes
 
-![Make Reservation](make_res.png)
+![Make Reservation](images/wireframe/make_res.png)
 
-![Confirm Reservation](confirm_res_inital.png)
+![Confirm Reservation](images/wireframe/confirm_res_inital.png)
 
-![Confirm Reservation - Pre - Unavailable](confirm_res_pre_UA.png)
+![Confirm Reservation - Pre - Unavailable](images/wireframe/confirm_res_pre_UA.png)
 
-![Confirm Reservation - Post - Unavailable](confirm_res_post_UA.png)
+![Confirm Reservation - Post - Unavailable](images/wireframe/confirm_res_post_UA.png)
 
-![Confirm Reservation - Post - Available](confirm_res_post_A.png)
+![Confirm Reservation - Post - Available](images/wireframe/confirm_res_post_A.png)
 
-![Extend Reservation](extend_res.png)
+![Extend Reservation](images/wireframe/extend_res.png)
+
 
 Based on our wireframe, the initial landing page in the CSXL Lab is titled "Make a Reservation." Here, we have integrated image icons alongside key information such as "First Name," "Last Name," "Sitterson 011," "Monitor #," the date, and start-stop clock icons. These enhancements not only add to the visual appeal of the website, but also provide the users with more intuitive information compared to the original CSXL Reservation page. We have separated the "Confirm" button and the "Time Remaining to Cancel" feature to make it more user friendly and conform to industry's standards.
 
