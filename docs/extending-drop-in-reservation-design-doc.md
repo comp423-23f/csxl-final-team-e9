@@ -28,18 +28,6 @@ As Sally Student, if I want to spend more or less time in the CSXL Lab than my r
 
 ## Wireframes
 
-![Make Reservation](images/wireframe/make_res.png)
-
-![Confirm Reservation](images/wireframe/confirm_res_inital.png)
-
-![Confirm Reservation - Pre - Unavailable](images/wireframe/confirm_res_pre_UA.png)
-
-![Confirm Reservation - Post - Unavailable](images/wireframe/confirm_res_post_UA.png)
-
-![Confirm Reservation - Post - Available](images/wireframe/confirm_res_post_A.png)
-
-![Extend Reservation](images/wireframe/extend_res.png)
-
 Based on our wireframe, the initial landing page in the CSXL Lab is titled "Make a Reservation." Here, we have integrated image icons alongside key information such as "First Name," "Last Name," "Sitterson 011," "Monitor #," the date, and start-stop clock icons. These enhancements not only add to the visual appeal of the website, but also provide the users with more intuitive information compared to the original CSXL Reservation page. We have separated the "Confirm" button and the "Time Remaining to Cancel" feature to make it more user friendly and conform to industry's standards.
 
 Moving on to the second page, "Reservation Confirmation," users are presented with text labels along with image icons, including "First Name," "Last Name," "Sitterson 011," "Monitor #," "Day and Date," and "Start and End Time." On this page, users have the option to click the button “Extend” in order to extend their reservation. This extend button should be available to click and blue only when there is 30 minutes left in the current reservation. Otherwise, the extend button will be greyed out if the student cannot extend the reservation because someone has reserved a seat or if there are more than 30 minutes left in the current reservation. This design decision aligns with a logical user flow, because the option to edit should follow the reservation confirmation since it is the final page the user has open.
@@ -56,7 +44,7 @@ In the frontend, we will be adding a new extension component which will have a r
 
 **What planned page components and widgets, per the assigned reading, do you anticipate needing in your feature’s frontend?**
 
-First, we anticipate editing the coworking-reservation-card located at frontend/src/app/coworking/widgets/coworking-reservation-card by adding an "extend" button that would only show up if an extension was permitted, as well as a countdown timer to reveal how much time is left in Sally Student's current reservation on the reservation confirmation page. We also plan to add a new page component for an extension form/page that Sally Student can navigate to if an extension is permitted, so that they can decide how much time to extend their current reservation by. In addition, we plan on adding a time picker widget (https://m3.material.io/components/time-pickers/overview, https://stackoverflow.com/questions/45791339/how-to-implement-a-datetime-picker-in-ionic-2-to-select-time-range) to coworking-reservation-card to improve the current UI in terms of selecting start and end times when creating a new reservation.
+First, we anticipate editing the coworking-reservation-card located at frontend/src/app/coworking/widgets/coworking-reservation-card by adding an "extend" button that would only show up if an extension was permitted, as well as a countdown timer to reveal how much time is left in Sally Student's current reservation on the reservation confirmation page. We also plan to add a new page component for an extension form/page that Sally Student can navigate to if an extension is permitted, so that they can decide how much time to extend their current reservation by. In addition, we plan on adding a time picker widget (<https://m3.material.io/components/time-pickers/overview>, <https://stackoverflow.com/questions/45791339/how-to-implement-a-datetime-picker-in-ionic-2-to-select-time-range>) to coworking-reservation-card to improve the current UI in terms of selecting start and end times when creating a new reservation.
 
 **What additional models, or changes to existing models, do you foresee needing (if any)?**
 
