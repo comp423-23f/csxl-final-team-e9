@@ -28,6 +28,12 @@ As Sally Student, if I want to spend more or less time in the CSXL Lab than my r
 
 ## Wireframes
 
+Based on our wireframe, the initial landing page in the CSXL Lab is titled "Make a Reservation." Here, we haveintegrated image icons alongside key information such as "First Name," "Last Name," "Sitterson 011," "Monitor #," the date, and start-stop clock icons. These enhancements not only add to the visual appeal of the website. but also provide users with more intuitive information compared to the original CSXL Reservation page. Notably, we have separated the "Confirm" button and the "Time Remaining to Cancel" feature to make it more user friendly.
+
+Moving on to the second page, "Reservation Confirmation," users are presented with text labels paired with image icons, including "First Name," "Last Name," "Sitterson 011," "Monitor #," "Day and Date," and "Start and End Time." On this page, users have the option to click the button “Extend”in order to extend their reservation. This button should only appear when there is 30 minutes left. This design decision aligns with a logical user flow, because the option to edit should follow the reservation confirmation since it is the final page the user has open.
+
+Once the “Extend” button is clicked, it will direct the user to the last page, "Extend a Reservation," which has the same design as the "Make a Reservation" page's appearance. Here, users can adjust their reservation times in 15-minute increments. This specific time interval was chosen because 5 minutes appeared too brief, and 30 minutes felt excessive for users looking to extend their original reservations.
+
 ## Technical Implementation Opportunities and Planning
 
 **What specific areas of the existing code base will you directly depend upon, extend, or integrate with?**
