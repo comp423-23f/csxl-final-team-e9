@@ -1,6 +1,6 @@
 # Feature: Extending a Drop-in Reservation
 
-> Written by Isha Atre, Chloe Carroll, Lauren Jones, and Soumya Mahavadi<br> > _Last Updated: 11/01/2023_
+> Written by Isha Atre, Chloe Carroll, Lauren Jones, and Soumya Mahavadi<br>_Last Updated: 11/01/2023_
 
 ## Overview
 
@@ -10,12 +10,12 @@ This feature allows students who have 30 minutes or less left in their current d
 
 **Sally Student** wants to know if her drop-in reservation can be extended and have the ability to extend it by up to an hour if so.
 
-**Amy Ambassador** and **Rhonda Root** wants the ability to extend Sally Student's drop-in reservation if there is no reservation immediately following it.
+**Amy Ambassador** and **Rhonda Root** want the ability to extend Sally Student's drop-in reservation if there is no reservation immediately following it.
 
 ## User Stories
 
 **Story A:**
-As Sally Student, if the following time slot for my current seat is available, I want the ability to extend my drop-in seat reservation by up to 1 additional hour, in increments of 15 minutes. If the following time slot is reserved, I want to know that I cannot extend and see the time remaining on my reservation.
+As Sally Student, if the following time slot for my current seat is available, I want the ability to extend my drop-in seat reservation by up to 1 additional hour, in increments of 15 minutes. If the following time slot is reserved, I want to know that I cannot extend, and be able to see the time remaining on my reservation.
 
 **Story B:**
 As Sally Student, if the time slot following mine is originally reserved, but that reservation is cancelled, the option to extend my current reservation should reappear.
