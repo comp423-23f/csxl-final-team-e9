@@ -17,12 +17,12 @@
 
 h3 {
     font-size: 18px;
-    margin-bottom: 0px;
+    display: flex;
+    align-items: center;
 }
 
-h3>label {
-    width: 64px;
-    display: inline-block;
+h3>span {
+    margin-right: 8px;
 }
 
 p {
