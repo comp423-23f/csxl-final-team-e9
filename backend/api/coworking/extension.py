@@ -21,8 +21,7 @@ openapi_tags = {
 
 @api.put("/reservation/{id}", tags=["Coworking"])
 def update_extension_request(
-    id: int,
     extension_request: ExtensionRequest,
     subject: User = Depends(registered_user),
     reservation_svc: ReservationService = Depends(),
-) -> ExtensionRequest: # type: ignore
+) -> Reservation: # type: ignore
