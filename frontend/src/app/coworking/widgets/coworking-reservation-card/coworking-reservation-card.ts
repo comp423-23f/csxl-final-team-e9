@@ -3,6 +3,7 @@ import { Reservation } from '../../coworking.models';
 import { Observable, map, mergeMap, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { ReservationService } from '../../reservation/reservation.service';
+import { ExtensionService } from '../../reservation/extension/extension.service';
 
 @Component({
   selector: 'coworking-reservation-card',
@@ -16,7 +17,8 @@ export class CoworkingReservationCard implements OnInit {
 
   constructor(
     public router: Router,
-    public reservationService: ReservationService
+    public reservationService: ReservationService,
+    public extensionService: ExtensionService
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +40,10 @@ export class CoworkingReservationCard implements OnInit {
   checkout() {
     this.reservationService.checkout(this.reservation).subscribe();
   }
+
+  /*extend() {
+    this.extensionService.extend(this.reservation).subscribe();
+  }*/
 
   private initDraftConfirmationDeadline(): Observable<string> {
     const fiveMinutes =
