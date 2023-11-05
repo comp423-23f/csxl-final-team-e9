@@ -1,4 +1,4 @@
-"""This API is used to establish a route for the extension.py."""
+"""This API is used to extend reservations."""
 
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -13,15 +13,19 @@ from ...models.coworking import (
     ReservationState,
 )
 
+__authors__ = ["Isha Atre, Chloe Carroll, Lauren Jones, Soumya Mahavadi"]
+__copyright__ = "Copyright 2023"
+__license__ = "MIT"
+
 api = APIRouter(prefix="/api/coworking")
 openapi_tags = {
     "name": "Coworking",
-    "description": "Coworking reservations, status, and XL Ambassador functionality.",
+    "description": "Extending coworking reservations.",
 }
 
 @api.put("/reservation/{id}", tags=["Coworking"])
-def update_extension_request(
-    extension_request: ExtensionRequest,
+def extend_reservation(
+    extensionRequest: ExtensionRequest,
     subject: User = Depends(registered_user),
     reservation_svc: ReservationService = Depends(),
-) -> Reservation: # type: ignore
+) -> Reservation:
