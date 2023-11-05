@@ -449,6 +449,35 @@ class ReservationService:
         self._session.add(draft)
         self._session.commit()
         return draft.to_model()
+    
+    # def maximum_extension_time();
+    
+        """Idenitify the maximum amount of time a reservation can be extended by.
+
+        Users should be able to change reservations without hassle.
+        Calculates the maximum amount of time users can extend their reservation to within policy restrictions
+
+        Args:
+            subject (User): The user initiating the reservation change request.
+            delta (ReservationPartial): The fields of a reservation with requested changes.
+
+        Returns:
+            extension time availability: Returns a time 0, 15, 30, 45, or 60 minutes past delta end time
+
+        Raises:
+            ResourceNotFoundException when the requested ID is not found
+            UserPermissionException when user does not have permission to modify the reservation
+            NotImplementedError when requested changes are not yet implemented as features
+
+        Future work - Extend Reservation:
+            Subtracts time from inital variable of delta end time + 60 minutes
+                If, the value is greater than or equal to lab close time
+                If, the value is greater than or equal to the start time of the next reservation for the delta seat
+            Notes
+                Implement use cases of draft_reservation
+                Create a new variable maximum_extension_reservation_duration to replace maximum_initial_reservation_duration
+                Edit maximum_extension_reservation_duration to handle use cases that increment by 15 minutes, up to an hour
+        """
 
     def change_reservation(
         self, subject: User, delta: ReservationPartial
@@ -471,6 +500,11 @@ class ReservationService:
 
         Future work:
             Implement the ability to change seats, party, and start/end time within policy restrictions
+
+        Future work - Extend Reservation:
+            Implement use cases of draft_reservation
+            Create a new variable maximum_extension_reservation_duration to replace maximum_initial_reservation_duration
+            Edit maximum_extension_reservation_duration to handle use cases that increment by 15 minutes, up to an hour
         """
         entity = self._session.get(ReservationEntity, delta.id)
         if entity is None:
