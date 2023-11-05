@@ -6,17 +6,23 @@
     </mat-card-header>
 
     <mat-card-header *ngSwitchCase="'CONFIRMED'">
-      <mat-card-title>Reservation #{{ reservation.id }} Confirmed</mat-card-title>
-      <mat-card-subtitle>See the XL Ambassador staffing the front desk to
-        check-in.</mat-card-subtitle>
+      <mat-card-title
+        >Reservation #{{ reservation.id }} Confirmed</mat-card-title
+      >
+      <mat-card-subtitle
+        >See the XL Ambassador staffing the front desk to
+        check-in.</mat-card-subtitle
+      >
     </mat-card-header>
 
     <mat-card-header *ngSwitchCase="'CHECKED_IN'">
       <mat-card-title>You're Checked In!</mat-card-title>
-      <mat-card-subtitle>See the XL Ambassador if you need anything. When you're done, just
+      <mat-card-subtitle
+        >See the XL Ambassador if you need anything. When you're done, just
         press the Check Out button or check out with the XL Ambassador.
         <br /><br />
-        Changing seats? Please check out and check back in.</mat-card-subtitle>
+        Changing seats? Please check out and check back in.</mat-card-subtitle
+      >
     </mat-card-header>
 
     <mat-card-header *ngSwitchCase="'CHECKED_OUT'">
@@ -42,7 +48,9 @@
     <mat-divider />
 
     <h3>
-      <label>When</label>
+      <span class="material-icons" style="color: rgb(39, 136, 205)"
+        >calendar_today</span
+      >
       <strong>{{ reservation.start | date: 'shortTime' }}</strong> until
       <strong>{{ reservation.end | date: 'shortTime' }}</strong>
     </h3>
@@ -55,7 +63,10 @@
     <mat-divider />
 
     <h3>
-      <label>What</label> <strong>{{ reservation.seats[0].title }}</strong>
+      <span class="material-icons" style="color: rgb(39, 136, 205)"
+        >computer</span
+      >
+      <strong>{{ reservation.seats[0].title }}</strong>
     </h3>
     <mat-divider />
 
@@ -70,7 +81,11 @@
           Cancel
         </button>
         &nbsp;
-        <button mat-stroked-button type="submit" color="primary" (click)="confirm()">
+        <button
+          mat-stroked-button
+          type="submit"
+          color="primary"
+          (click)="confirm()">
           {{ draftConfirmationDeadline$ | async }}
         </button>
       </ng-container>
@@ -79,25 +94,34 @@
         <button mat-stroked-button type="submit" (click)="cancel()">
           Cancel
         </button>
-        <button mat-stroked-button type="submit" (click)="extend()">
-          Extend
-        </button>
       </ng-container>
 
       <ng-container *ngSwitchCase="'CHECKED_IN'">
-        <button mat-stroked-button type="submit" (click)="checkout()" color="primary">
+        <button
+          mat-stroked-button
+          type="submit"
+          (click)="checkout()"
+          color="primary">
           Check Out
         </button>
       </ng-container>
 
       <ng-container *ngSwitchCase="'CHECKED_OUT'">
-        <button mat-stroked-button type="submit" (click)="router.navigateByUrl('/coworking')" color="primary">
+        <button
+          mat-stroked-button
+          type="submit"
+          (click)="router.navigateByUrl('/coworking')"
+          color="primary">
           Return to Coworking Home
         </button>
       </ng-container>
 
       <ng-container *ngSwitchCase="'CANCELLED'">
-        <button mat-stroked-button type="submit" (click)="router.navigateByUrl('/coworking')" color="primary">
+        <button
+          mat-stroked-button
+          type="submit"
+          (click)="router.navigateByUrl('/coworking')"
+          color="primary">
           Return to Coworking Home
         </button>
       </ng-container>
