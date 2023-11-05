@@ -14,7 +14,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { ReservationComponent } from './reservation/reservation.component';
-import { ExtensionComponent } from './extension/extension.component';
+import { ExtensionComponent } from './reservation/extension/extension.component';
 
 @NgModule({
   declarations: [
