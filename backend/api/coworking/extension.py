@@ -28,4 +28,4 @@ def extend_reservation(
     extensionRequest: ExtensionRequest,
     subject: User = Depends(registered_user),
     reservation_svc: ReservationService = Depends(),
-) -> Reservation:
+) -> Reservation: # type: ignore
