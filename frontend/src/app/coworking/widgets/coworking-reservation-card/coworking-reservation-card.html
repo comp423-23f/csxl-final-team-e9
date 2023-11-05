@@ -33,11 +33,9 @@
   <!-- Card Content -->
   <mat-card-content>
     <h3>
-      <span class="material-icons">person</span>
-      <strong>
-        {{ reservation.users[0].first_name }}
-        {{ reservation.users[0].last_name }}
-      </strong>
+      <label>Who</label>
+      <strong>{{ reservation.users[0].first_name }}
+        {{ reservation.users[0].last_name }}</strong>
     </h3>
     <mat-divider />
 
@@ -59,10 +57,7 @@
     </h3>
     <mat-divider />
 
-    <h3>
-      <span class="material-icons">apartment</span>
-      <strong>The XL Colab in Sitterson 156</strong>
-    </h3>
+    <h3><label>Where</label> <strong>The XL Colab in Sitterson 156</strong></h3>
 
     <mat-card-actions align="end" [ngSwitch]="reservation.state">
       <ng-container *ngSwitchCase="'DRAFT'">
