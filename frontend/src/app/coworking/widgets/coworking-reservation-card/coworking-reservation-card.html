@@ -54,6 +54,7 @@
       >
       <strong>{{ reservation.start | date: 'shortTime' }}</strong> until
       <strong>{{ reservation.end | date: 'shortTime' }}</strong>
+
     </h3>
 
     <p *ngIf="reservation.state === 'CONFIRMED'">
