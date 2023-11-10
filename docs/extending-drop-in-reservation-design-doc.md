@@ -15,15 +15,21 @@ This feature allows students who have 30 minutes or less left in their current d
 ## User Stories
 
 **Story A:**
-As Sally Student, if the following time slot for my current seat is available, I want the ability to extend my drop-in seat reservation by up to 1 additional hour, in increments of 15 minutes. If the following time slot is reserved, I want to know that I cannot extend, and be able to see the time remaining on my reservation.
+As Sally Student, if the following time slot for my current seat is available and there is 30 minutes or less left of my current reservation, I want the ability to extend my drop-in seat reservation by an additional hour. 
 
 **Story B:**
-As Sally Student, if the time slot following mine is originally reserved, but that reservation is cancelled, the option to extend my current reservation should reappear.
+As Sally Student, if the following time slot is reserved, I want to know that I cannot extend, and be able to see the time remaining on my reservation.
 
 **Story C:**
-As Amy Ambassador or Rhonda Root, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.
+As Sally Student, if I have the option to extend my current reservation, I want to be able to extend it up to an additional hour in increments of 15 minutes.
 
 **Story D:**
+As Sally Student, if the time slot following mine is originally reserved, but that reservation is cancelled, the option to extend my current reservation should reappear.
+
+**Story E:**
+As Amy Ambassador or Rhonda Root, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.
+
+**Story F:**
 As Sally Student, if I want to spend more or less time in the CSXL Lab than my reservation is automatically calculated for, I want to be able to alter the time slots of my reservation. The initial reservation should be between 15 minutes and 2 hours.
 
 ## Wireframes
