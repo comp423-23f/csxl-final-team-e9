@@ -41,6 +41,7 @@
     <h3>
       <span class="material-icons" style="color: rgb(39, 136, 205)"
         >person</span
+      >
       <strong>
         {{ reservation.users[0].first_name }}
         {{ reservation.users[0].last_name }}
@@ -52,8 +53,10 @@
       <span class="material-icons" style="color: rgb(39, 136, 205)"
         >calendar_today</span
       >
-      <strong>{{ reservation.start | date: 'shortTime' }}</strong> until
-      <strong>{{ reservation.end | date: 'shortTime' }}</strong>
+      <strong>
+        {{ reservation.start | date: 'shortTime' }} until
+        {{ reservation.end | date: 'shortTime' }}
+      </strong>
     </h3>
 
     <p *ngIf="reservation.state === 'CONFIRMED'">
