@@ -670,7 +670,14 @@ class ReservationService:
                 available_seats.append(seat)
         return available_seats
 
+
     #RESERVATION EXTENSION WORK BEGINS
+    def check_extension_eligibility(self, reservation_id: int) -> bool:
+        entity = self._session.get(ReservationEntity, reservation_id)
+        if entity is None:
+            raise ResourceNotFoundException(f"Reservation with ID {reservation_id} not found.")
+        return entity.is_eligible_for_extension()
+
     def extend_reservation(self, subject: User, reservation_id: int, extension_duration: timedelta) -> Reservation:
         """Allows users to extend their current reservation by up to an additional hour.
 
@@ -715,6 +722,8 @@ class ReservationService:
         conflicting_reservations = self._get_active_reservations_for_user(subject, TimeRange(start=entity.end, end=new_end_time))
         if conflicting_reservations:
             raise ReservationException("Extension conflicts with another reservation.")
+        
+        # Add function to checks if Colab is closed
 
         # Update reservation
         entity.end = new_end_time

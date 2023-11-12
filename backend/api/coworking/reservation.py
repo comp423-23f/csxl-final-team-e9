@@ -86,3 +86,12 @@ def extend_reservation(
     Returns:
         Reservation: The updated reservation with the new end time."""
     return reservation_svc.extend_reservation(subject, id, extension_duration)
+
+@api.get("/reservation/{id}/eligible_for_extension")
+def check_reservation_eligibility(
+    id: int,
+    reservation_svc: ReservationService = Depends(),
+    subject: User = Depends(registered_user),
+) -> bool:
+    """Check if a reservation is eligible for an extension."""
+    return reservation_svc.check_extension_eligibility(id)
