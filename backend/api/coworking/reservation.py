@@ -4,6 +4,7 @@ This API is used to make and manage reservations."""
 
 from fastapi import APIRouter, Depends, HTTPException
 from datetime import timedelta
+from datetime import timedelta
 from ..authentication import registered_user
 from ...services.coworking.reservation import ReservationService
 from ...models import User
@@ -74,6 +75,7 @@ def extend_reservation(
     reservation_svc: ReservationService = Depends(),
 ) -> Reservation:
     """Extend a reservation's end time.
+    
     
     This endpoint allows a user to extend their current reservation by up to an additional hour,
     provided there is less than 30 minutes remaining in their current reservation.
