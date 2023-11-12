@@ -669,3 +669,64 @@ class ReservationService:
             if len(seat.availability) > 0:
                 available_seats.append(seat)
         return available_seats
+
+
+    #RESERVATION EXTENSION WORK BEGINS
+    def check_extension_eligibility(self, reservation_id: int) -> bool:
+        entity = self._session.get(ReservationEntity, reservation_id)
+        if entity is None:
+            raise ResourceNotFoundException(f"Reservation with ID {reservation_id} not found.")
+        return entity.is_eligible_for_extension()
+
+    def extend_reservation(self, subject: User, reservation_id: int, extension_duration: timedelta) -> Reservation:
+        """Allows users to extend their current reservation by up to an additional hour.
+
+        This method enables a user to extend an ongoing reservation if there is less than 30 minutes remaining.
+        The extension can be up to an hour past the original end time.
+        It ensures that the extension does not conflict with other reservations and adheres to the coworking space's policies.
+
+        Args:
+            subject (User): The user requesting the reservation extension.
+            reservation_id (int): The ID of the reservation to be extended.
+            extension_duration (timedelta): The duration by which the reservation is to be extended, up to a maximum of one hour.
+
+        Returns:
+            Reservation: The updated reservation with the new end time.
+
+        Raises:
+            ValueError: If the extension duration is more than 1 hour.
+            ResourceNotFoundException: If the reservation with the specified ID does not exist.
+            UserPermissionException: If the user does not have permission to extend the reservation.
+            ReservationException: If the reservation is not eligible for extension (e.g., more than 30 minutes remaining, or in an incompatible state).
+
+        Future Work:
+            Implement more sophisticated conflict checking with other reservations and potential policy changes regarding reservation extensions.
+        """
+        if extension_duration > timedelta(hours=1):
+            raise ValueError("Cannot extend reservation by more than 1 hour.")
+
+        entity = self._session.get(ReservationEntity, reservation_id)
+        if entity is None:
+            raise ResourceNotFoundException(f"Reservation(id={reservation_id}) does not exist")
+
+        if subject.id not in [user.id for user in entity.users]:
+            self._permission_svc.enforce(subject, "coworking.reservation.manage", f"user/{subject.id}")
+
+        # May be unnecessary once frontend logic is implemented
+        if not entity.is_eligible_for_extension():
+            raise ReservationException("Reservation is not eligible for extension.")
+
+        new_end_time = entity.end + extension_duration
+        # Check for conflicting reservations
+        # Edit to find available time to extend if reservation overlaps with maximum extension
+        conflicting_reservations = self._get_active_reservations_for_user(subject, TimeRange(start=entity.end, end=new_end_time))
+        if conflicting_reservations:
+            raise ReservationException("Extension conflicts with another reservation.")
+        
+        # Add function to checks if Colab is closed
+
+        # Update reservation
+        entity.end = new_end_time
+        self._session.commit()
+
+        return entity.to_model()

@@ -1,6 +1,6 @@
 """Entity for Reservations."""
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy import Integer, String, Boolean, ForeignKey, DateTime, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship, Session
 from ..entity_base import EntityBase
@@ -88,3 +88,17 @@ class ReservationEntity(EntityBase):
             created_at=model.created_at,
             updated_at=model.updated_at,
         )
+    
+    def is_eligible_for_extension(self) -> bool:
+        """Determines if the reservation is eligible for an extension.
+
+        This method checks whether the reservation can be extended based on the remaining time until its scheduled end.
+        A reservation is eligible for an extension if there are 30 minutes or less remaining.
+
+        Returns:
+            bool: True if the reservation is eligible for an extension
+            (less than or equal to 30 minutes remaining until the end), otherwise False.
+        """
+        now = datetime.now()
+        remaining = self.end - now
+        return remaining <= timedelta(minutes=30)
