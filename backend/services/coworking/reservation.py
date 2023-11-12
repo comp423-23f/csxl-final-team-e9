@@ -670,6 +670,7 @@ class ReservationService:
                 available_seats.append(seat)
         return available_seats
 
+
     #RESERVATION EXTENSION WORK BEGINS
     def get_reservation_time_remaining(self, reservation_id: int) -> int:
         entity = self._session.get(ReservationEntity, reservation_id)
@@ -743,6 +744,14 @@ class ReservationService:
         )
         if conflicting_reservations:
             raise ReservationException("Extension conflicts with another reservation.")
+        
+
+
+        # Add function to checks if Colab is closed based on operating hours
+        
+        extended_time_range = TimeRange(start=entity.end, end=new_end_time)
+        if not self.is_colab_open(extended_time_range):
+            raise ReservationException("Colab is closed during the extension period.")
 
         # Add function to checks if Colab is closed based on operating hours
         
