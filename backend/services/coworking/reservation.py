@@ -670,8 +670,8 @@ class ReservationService:
                 available_seats.append(seat)
         return available_seats
     def is_colab_open (self, time_range: TimeRange) -> bool:
-         operating_hours = self._operating_hours_svc.schedule(time_range)
-          return bool(operating_hours)
+        operating_hours = self._operating_hours_svc.schedule(time_range)
+        return bool(operating_hours)
 
     def is_colab_open(self, time_range: TimeRange) -> bool:
         operating_hours = self._operating_hours_svc.schedule(time_range)
