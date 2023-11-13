@@ -1,5 +1,6 @@
 <div class="card-container">
-  <ng-container>
-    <extend-reservation-card></extend-reservation-card>
+  <ng-container *ngIf="reservation$ | async as reservation">
+    <extend-reservation-card
+      [reservation]="reservation"></extend-reservation-card>
   </ng-container>
 </div>

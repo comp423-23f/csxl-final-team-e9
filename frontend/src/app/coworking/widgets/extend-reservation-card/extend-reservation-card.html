@@ -1,11 +1,8 @@
 <mat-card appearance="outlined">
   <!-- Card Header -->
-  <ng-container [ngSwitch]="extension.state">
+  <ng-container [ngSwitch]="reservation.state">
     <mat-card-title
-      >Confirm Reservation #{{
-        extension.reservation.id
-      }}
-      Extension</mat-card-title
+      >Confirm Reservation #{{ reservation.id }} Extension</mat-card-title
     >
     <mat-card-header *ngSwitchCase="'DRAFT'">
       <mat-card-title>Confirm Extension Details</mat-card-title>
@@ -13,7 +10,7 @@
 
     <mat-card-header *ngSwitchCase="'CONFIRMED'">
       <mat-card-title
-        >Reservation #{{ extension.reservation.id }} Confirmed</mat-card-title
+        >Reservation #{{ reservation.id }} Confirmed</mat-card-title
       >
       <mat-card-subtitle
         >See the XL Ambassador staffing the front desk to
@@ -34,8 +31,8 @@
         >person</span
       >
       <strong>
-        {{ extension.reservation.users[0].first_name }}
-        {{ extension.reservation.users[0].last_name }}
+        {{ reservation.users[0].first_name }}
+        {{ reservation.users[0].last_name }}
       </strong>
     </h3>
     <mat-divider />
@@ -45,19 +42,19 @@
         >calendar_today</span
       >
       <strong>
-        {{ extension.reservation.start | date: 'shortTime' }} until
-        {{ extension.reservation.end | date: 'shortTime' }}
+        {{ reservation.start | date: 'shortTime' }} until
+        {{ reservation.end | date: 'shortTime' }}
       </strong>
     </h3>
 
-    <p *ngIf="extension.reservation.state === 'CONFIRMED'"></p>
+    <p *ngIf="reservation.state === 'CONFIRMED'"></p>
     <mat-divider />
 
     <h3>
       <span class="material-icons" style="color: rgb(39, 136, 205)"
         >computer</span
       >
-      <strong>{{ extension.reservation.seats[0].title }}</strong>
+      <strong>{{ reservation.seats[0].title }}</strong>
     </h3>
     <mat-divider />
 
@@ -68,7 +65,7 @@
       <strong>The XL Colab in Sitterson 156</strong>
     </h3>
 
-    <mat-card-actions align="end" [ngSwitch]="extension.reservation.state">
+    <mat-card-actions align="end" [ngSwitch]="reservation.state">
       <ng-container *ngSwitchCase="'DRAFT'">
         <button mat-stroked-button type="submit" (click)="cancel()">
           Cancel
