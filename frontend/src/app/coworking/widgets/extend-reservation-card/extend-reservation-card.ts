@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Extension } from '../../coworking.models';
+import { Extension, Reservation } from '../../coworking.models';
 import { Observable, map, mergeMap, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { ReservationService } from '../../reservation/reservation.service';
@@ -10,8 +10,9 @@ import { ExtensionService } from '../../reservation/extension/extension.service'
   templateUrl: './extend-reservation-card.html',
   styleUrls: ['./extend-reservation-card.css']
 })
-export class ExtendReservationCard implements OnInit {
-  @Input() extension!: Extension;
+export class ExtendReservationCard {
+  @Input() reservation!: Reservation;
+  // implements OnInit
 
   public draftConfirmationDeadline$!: Observable<string>;
 
@@ -21,9 +22,9 @@ export class ExtendReservationCard implements OnInit {
     public extensionService: ExtensionService
   ) {}
 
-  ngOnInit(): void {
-    this.draftConfirmationDeadline$ = this.initDraftConfirmationDeadline();
-  }
+  //ngOnInit(): void {
+  //this.draftConfirmationDeadline$ = this.initDraftConfirmationDeadline();
+  //}
 
   confirm() {
     this.extensionService.extend();
@@ -31,16 +32,16 @@ export class ExtendReservationCard implements OnInit {
 
   cancel() {}
 
-  private initDraftConfirmationDeadline(): Observable<string> {
+  /*private initDraftConfirmationDeadline(): Observable<string> {
     const fiveMinutes =
-      5 /* minutes */ * 60 /* seconds */ * 1000; /* milliseconds */
+      5  * 60  * 1000; 
 
     const extensionDraftDeadline = (extension: Extension) =>
       extension.created_at.getTime() + fiveMinutes;
 
     const deadlineString = (deadline: number): string => {
       const now = new Date().getTime();
-      const delta = (deadline - now) / 1000; /* milliseconds */
+      const delta = (deadline - now) / 1000; 
       if (delta > 60) {
         return `Confirm in ${Math.ceil(delta / 60)} minutes`;
       } else if (delta > 0) {
@@ -56,5 +57,5 @@ export class ExtendReservationCard implements OnInit {
       map(extensionDraftDeadline),
       map(deadlineString)
     );
-  }
+  } */
 }
