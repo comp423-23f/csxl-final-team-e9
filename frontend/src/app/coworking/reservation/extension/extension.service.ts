@@ -23,6 +23,7 @@ export class ExtensionService {
     let endpoint = `/api/coworking/reservation/${id}`;
     return this.http.get<boolean>(endpoint);
   }
+  cancel() {}
 
   extend() {}
 }
