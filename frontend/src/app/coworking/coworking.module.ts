@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { ReservationComponent } from './reservation/reservation.component';
 import { ExtensionComponent } from './reservation/extension/extension.component';
+import { ExtendReservationCard } from './widgets/extend-reservation-card/extend-reservation-card';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ExtensionComponent } from './reservation/extension/extension.component'
     CoworkingDropInCard,
     CoworkingReservationCard,
     CoworkingHoursCard,
-    ExtensionComponent
+    ExtensionComponent,
+    ExtendReservationCard
   ],
   imports: [
     CommonModule,
