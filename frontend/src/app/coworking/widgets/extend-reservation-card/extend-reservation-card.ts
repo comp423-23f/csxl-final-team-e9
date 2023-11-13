@@ -28,9 +28,12 @@ export class ExtendReservationCard {
 
   confirm() {
     this.extensionService.extend();
+    this.router.navigate(['/coworking/reservation/', this.reservation.id]);
   }
 
-  cancel() {}
+  cancel() {
+    this.router.navigate(['/coworking/reservation/', this.reservation.id]);
+  }
 
   /*private initDraftConfirmationDeadline(): Observable<string> {
     const fiveMinutes =
