@@ -677,6 +677,11 @@ class ReservationService:
         if entity is None:
             raise ResourceNotFoundException(f"Reservation with ID {reservation_id} not found.")
         return entity.is_eligible_for_extension()
+    
+    def is_colab_open (self, time_range: TimeRange) -> bool:
+         operating_hours = self._operating_hours_svc.schedule(time_range)
+          return bool(operating_hours)
+
 
     def extend_reservation(self, subject: User, reservation_id: int, extension_duration: timedelta) -> Reservation:
         """Allows users to extend their current reservation by up to an additional hour.
@@ -724,6 +729,9 @@ class ReservationService:
             raise ReservationException("Extension conflicts with another reservation.")
         
         # Add function to checks if Colab is closed
+         extended_time_range = TimeRange(start=entity.end, end=new_end_time)
+        if not self.is_colab_open(extended_time_range):
+            raise ReservationException("Colab is closed during the extension period.")
 
         # Update reservation
         entity.end = new_end_time
