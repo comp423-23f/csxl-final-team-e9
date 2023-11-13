@@ -16,7 +16,7 @@ export class CoworkingReservationCard implements OnInit {
 
   public draftConfirmationDeadline$!: Observable<string>;
   public reservationCountdown$!: Observable<timeComponents>;
-  public thirtyMinutes: boolean = false;
+  public thirtyMinutesLeft: boolean = false;
 
   constructor(
     public router: Router,
@@ -95,7 +95,7 @@ export class CoworkingReservationCard implements OnInit {
       const minutes = Math.floor((delta / 60) % 60);
       const seconds = Math.floor(delta) % 60;
       if (delta / 60 <= 30) {
-        this.thirtyMinutes = true;
+        this.thirtyMinutesLeft = true;
       }
       return { seconds, minutes, hours };
     };
