@@ -107,6 +107,7 @@
           Cancel
         </button>
         <button
+          [disabled]="!thirtyMinutes"
           mat-stroked-button
           [routerLink]="[
             '/coworking/reservation/',

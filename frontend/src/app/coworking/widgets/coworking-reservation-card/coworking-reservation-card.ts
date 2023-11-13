@@ -16,6 +16,7 @@ export class CoworkingReservationCard implements OnInit {
 
   public draftConfirmationDeadline$!: Observable<string>;
   public reservationCountdown$!: Observable<timeComponents>;
+  public thirtyMinutes: boolean = false;
 
   constructor(
     public router: Router,
@@ -82,8 +83,10 @@ export class CoworkingReservationCard implements OnInit {
       60 /* seconds */ *
       1000; /* milliseconds */
 
+    //const reservationDeadline = (reservation: Reservation) =>
+    //  reservation.created_at.getTime() + twoHours;
     const reservationDeadline = (reservation: Reservation) =>
-      reservation.created_at.getTime() + twoHours;
+      reservation.end.getTime();
 
     const countdownString = (deadline: number): timeComponents => {
       const now = new Date().getTime();
@@ -91,6 +94,9 @@ export class CoworkingReservationCard implements OnInit {
       const hours = Math.floor((delta / (60 * 60)) % 24);
       const minutes = Math.floor((delta / 60) % 60);
       const seconds = Math.floor(delta) % 60;
+      if (delta / 60 <= 30) {
+        this.thirtyMinutes = true;
+      }
       return { seconds, minutes, hours };
     };
 
