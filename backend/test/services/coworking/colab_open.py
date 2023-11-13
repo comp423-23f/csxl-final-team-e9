@@ -5,7 +5,7 @@ from your_module.reservation import ReservationService, TimeRange
 
 class TestReservationService(unittest.TestCase):
     def test_is_colab_open_colab_open(self):
-        # Create an instance of the ReservationService with actual dependencies
+        # Creating an instance of the ReservationService with actual dependencies
         reservation_service = ReservationService()
 
         # Choose a time range when Colab is expected to be open
