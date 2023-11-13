@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Reservation } from '../../coworking.models';
-import { Observable, map, mergeMap, timer } from 'rxjs';
+import { Observable, interval, map, mergeMap, shareReplay, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { ReservationService } from '../../reservation/reservation.service';
 import { ExtensionService } from '../../reservation/extension/extension.service';
+import { timeComponents } from './timeComponents';
 
 @Component({
   selector: 'coworking-reservation-card',
@@ -14,6 +15,7 @@ export class CoworkingReservationCard implements OnInit {
   @Input() reservation!: Reservation;
 
   public draftConfirmationDeadline$!: Observable<string>;
+  public reservationCountdown$!: Observable<timeComponents>;
 
   constructor(
     public router: Router,
@@ -35,6 +37,7 @@ export class CoworkingReservationCard implements OnInit {
 
   confirm() {
     this.reservationService.confirm(this.reservation).subscribe();
+    this.reservationCountdown$ = this.initReservationCountdown();
   }
 
   checkout() {
@@ -69,6 +72,32 @@ export class CoworkingReservationCard implements OnInit {
       map(() => this.reservation),
       map(reservationDraftDeadline),
       map(deadlineString)
+    );
+  }
+
+  private initReservationCountdown(): Observable<timeComponents> {
+    const twoHours =
+      2 /* hours */ *
+      60 /* minutes */ *
+      60 /* seconds */ *
+      1000; /* milliseconds */
+
+    const reservationDeadline = (reservation: Reservation) =>
+      reservation.created_at.getTime() + twoHours;
+
+    const countdownString = (deadline: number): timeComponents => {
+      const now = new Date().getTime();
+      const delta = (deadline - now) / 1000; /* seconds */
+      const hours = Math.floor((delta / (60 * 60)) % 24);
+      const minutes = Math.floor((delta / 60) % 60);
+      const seconds = Math.floor(delta) % 60;
+      return { seconds, minutes, hours };
+    };
+
+    return timer(0, 1000).pipe(
+      map(() => this.reservation),
+      map(reservationDeadline),
+      map(countdownString)
     );
   }
 }

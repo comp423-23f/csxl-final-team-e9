@@ -23,6 +23,12 @@
         <br /><br />
         Changing seats? Please check out and check back in.</mat-card-subtitle
       >
+      <mat-card-footer *ngIf="reservationCountdown$ | async as t">
+        <strong>Time Remaining:</strong>
+        <span id="hours"> {{ t.hours }} </span>Hrs
+        <span id="minutes"> {{ t.minutes }} </span>Min
+        <span id="seconds"> {{ t.seconds }} </span>S
+      </mat-card-footer>
     </mat-card-header>
 
     <mat-card-header *ngSwitchCase="'CHECKED_OUT'">
