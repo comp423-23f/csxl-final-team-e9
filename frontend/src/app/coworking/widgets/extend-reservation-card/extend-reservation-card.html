@@ -1,9 +1,6 @@
 <mat-card appearance="outlined">
   <!-- Card Header -->
   <ng-container [ngSwitch]="reservation.state">
-    <mat-card-title
-      >Confirm Reservation #{{ reservation.id }} Extension</mat-card-title
-    >
     <mat-card-header *ngSwitchCase="'DRAFT'">
       <mat-card-title>Confirm Extension Details</mat-card-title>
     </mat-card-header>

@@ -13,6 +13,12 @@
         >See the XL Ambassador staffing the front desk to
         check-in.</mat-card-subtitle
       >
+      <mat-card-footer *ngIf="reservationCountdown$ | async as t">
+        <strong>Time Remaining:</strong>
+        <span id="hours"> {{ t.hours }} </span>Hrs
+        <span id="minutes"> {{ t.minutes }} </span>Min
+        <span id="seconds"> {{ t.seconds }} </span>S
+      </mat-card-footer>
     </mat-card-header>
 
     <mat-card-header *ngSwitchCase="'CHECKED_IN'">
@@ -106,16 +112,6 @@
         <button mat-stroked-button type="submit" (click)="cancel()">
           Cancel
         </button>
-        <button
-          [disabled]="!thirtyMinutesLeft"
-          mat-stroked-button
-          [routerLink]="[
-            '/coworking/reservation/',
-            reservation.id,
-            'extension'
-          ]">
-          Extend
-        </button>
       </ng-container>
 
       <ng-container *ngSwitchCase="'CHECKED_IN'">
@@ -125,6 +121,16 @@
           (click)="checkout()"
           color="primary">
           Check Out
+        </button>
+        <button
+          [disabled]="!thirtyMinutesLeft"
+          mat-stroked-button
+          [routerLink]="[
+            '/coworking/reservation/',
+            reservation.id,
+            'extension'
+          ]">
+          Extend
         </button>
       </ng-container>
 
