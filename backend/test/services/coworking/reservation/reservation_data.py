@@ -51,6 +51,7 @@ def instantiate_global_models(time: dict[str, datetime]):
         state=ReservationState.CHECKED_IN,
         users=[user_data.user],
         seats=[seat_data.monitor_seat_00],
+        time_remaining=THIRTY_MINUTES_IN_SECONDS,
     )
 
     # Reservation ended early (checked out)
@@ -65,6 +66,7 @@ def instantiate_global_models(time: dict[str, datetime]):
         state=ReservationState.CHECKED_OUT,
         users=[user_data.ambassador],
         seats=[seat_data.monitor_seat_01],
+        time_remaining=THIRTY_MINUTES_IN_SECONDS,
     )
 
     # Reservation cancelled
@@ -79,6 +81,7 @@ def instantiate_global_models(time: dict[str, datetime]):
         state=ReservationState.CANCELLED,
         users=[user_data.root],
         seats=[seat_data.monitor_seat_10],
+        time_remaining=THIRTY_MINUTES_IN_SECONDS,
     )
 
     # Future reservations for a half-hour toward end of day, with half hour til close
@@ -93,6 +96,7 @@ def instantiate_global_models(time: dict[str, datetime]):
         state=ReservationState.CONFIRMED,
         users=[user_data.root, user_data.ambassador],
         seats=[seat_data.reservable_seats[0], seat_data.reservable_seats[1]],
+        time_remaining=THIRTY_MINUTES_IN_SECONDS,
     )
 
     # Draft future reservation
@@ -107,6 +111,7 @@ def instantiate_global_models(time: dict[str, datetime]):
         state=ReservationState.DRAFT,
         users=[user_data.user],
         seats=[seat_data.reservable_seats[0]],
+        time_remaining=THIRTY_MINUTES_IN_SECONDS,
     )
 
     active_reservations = [reservation_1]

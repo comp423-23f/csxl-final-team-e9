@@ -32,6 +32,8 @@ class Reservation(ReservationIdentity, TimeRange):
     walkin: bool = False
     created_at: datetime
     updated_at: datetime
+    # not sure if time_remaining should be here
+    time_remaining: int
 
 
 class ReservationPartial(Reservation, BaseModel):
@@ -44,6 +46,8 @@ class ReservationPartial(Reservation, BaseModel):
     walkin: bool | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
+    # Added time_remaining to handle extend functionality
+    time_remaining: int | None = None
 
 
 class ReservationDetails(Reservation):

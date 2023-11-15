@@ -60,6 +60,7 @@ class ReservationEntity(EntityBase):
             room=self.room.to_model() if self.room else None,
             created_at=self.created_at,
             updated_at=self.updated_at,
+            time_remaining=self.time_remaining,
         )
 
     @classmethod
@@ -90,15 +91,12 @@ class ReservationEntity(EntityBase):
         )
     
     def is_eligible_for_extension(self) -> bool:
-        """Determines if the reservation is eligible for an extension.
-
-        This method checks whether the reservation can be extended based on the remaining time until its scheduled end.
-        A reservation is eligible for an extension if there are 30 minutes or less remaining.
-
-        Returns:
-            bool: True if the reservation is eligible for an extension
-            (less than or equal to 30 minutes remaining until the end), otherwise False.
-        """
+        """Determines if the reservation is eligible for an extension."""
+        return self.time_remaining <= 30 * 60 
+    
+    @property
+    def time_remaining(self) -> int:
+        """Calculates the time remaining for the reservation in seconds."""
         now = datetime.now()
-        remaining = self.end - now
-        return remaining <= timedelta(minutes=30)
+        remaining = max(self.end - now, timedelta(0))
+        return int(remaining.total_seconds())
