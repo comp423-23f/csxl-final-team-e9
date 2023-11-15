@@ -684,6 +684,18 @@ class ReservationService:
 
 
     #RESERVATION EXTENSION WORK BEGINS
+    def get_reservation_time_remaining(self, reservation_id: int) -> int:
+        entity = self._session.get(ReservationEntity, reservation_id)
+        if entity is None:
+            raise ResourceNotFoundException(f"Reservation with ID {reservation_id} not found.")
+        return entity.time_remaining
+
+    def check_extension_eligibility(self, reservation_id: int) -> bool:
+        entity = self._session.get(ReservationEntity, reservation_id)
+        if entity is None:
+            raise ResourceNotFoundException(f"Reservation with ID {reservation_id} not found.")
+        return entity.is_eligible_for_extension()
+
     def extend_reservation(self, subject: User, reservation_id: int, extension_duration: timedelta) -> Reservation:
         """Allows users to extend their current reservation by up to an additional hour.
 

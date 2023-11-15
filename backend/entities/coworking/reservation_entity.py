@@ -106,6 +106,12 @@ class ReservationEntity(EntityBase):
     @property
     def time_remaining(self) -> int:
         """Calculates the time remaining for the reservation in seconds."""
+        """Determines if the reservation is eligible for an extension."""
+        return self.time_remaining <= 30 * 60 
+    
+    @property
+    def time_remaining(self) -> int:
+        """Calculates the time remaining for the reservation in seconds."""
         now = datetime.now()
-        remaining = self.end - now
-        return remaining <= timedelta(minutes=30)
+        remaining = max(self.end - now, timedelta(0))
+        return int(remaining.total_seconds())
