@@ -669,6 +669,14 @@ class ReservationService:
             if len(seat.availability) > 0:
                 available_seats.append(seat)
         return available_seats
+
+    #RESERVATION EXTENSION WORK BEGINS
+    def get_reservation_time_remaining(self, reservation_id: int) -> int:
+        entity = self._session.get(ReservationEntity, reservation_id)
+        if entity is None:
+            raise ResourceNotFoundException(f"Reservation with ID {reservation_id} not found.")
+        return entity.time_remaining
+
     def is_colab_open (self, time_range: TimeRange) -> bool:
         operating_hours = self._operating_hours_svc.schedule(time_range)
         return bool(operating_hours)
