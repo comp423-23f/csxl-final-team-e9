@@ -91,22 +91,8 @@ class ReservationEntity(EntityBase):
             updated_at=model.updated_at,
         )
     
-    @property
+    # @property
     def is_eligible_for_extension(self) -> bool:
-        """Determines if the reservation is eligible for an extension.
-
-        This method checks whether the reservation can be extended based on the remaining time until its scheduled end.
-        A reservation is eligible for an extension if there are 30 minutes or less remaining.
-
-        Returns:
-            bool: True if the reservation is eligible for an extension
-            (less than or equal to 30 minutes remaining until the end), otherwise False.
-        """
-        return self.time_remaining <= 30 * 60 
-    
-    @property
-    def time_remaining(self) -> int:
-        """Calculates the time remaining for the reservation in seconds."""
         """Determines if the reservation is eligible for an extension."""
         return self.time_remaining <= 30 * 60 
     
