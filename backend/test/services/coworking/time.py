@@ -13,7 +13,7 @@ ONE_MINUTE = timedelta(minutes=1)
 FIVE_MINUTES = timedelta(minutes=5)
 THIRTY_MINUTES = timedelta(minutes=30)
 # Added Sprint 1.1 End
-THIRTY_MINUTES_IN_SECONDS = timedelta(minutes=1800)
+THIRTY_MINUTES_IN_SECONDS = int(1800*60)
 ONE_HOUR = timedelta(hours=1)
 ONE_DAY = timedelta(days=1)
 

@@ -91,6 +91,7 @@ class ReservationEntity(EntityBase):
             updated_at=model.updated_at,
         )
     
+    @property
     def is_eligible_for_extension(self) -> bool:
         """Determines if the reservation is eligible for an extension.
 
