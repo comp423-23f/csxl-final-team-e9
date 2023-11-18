@@ -77,6 +77,7 @@ def test_staff_checkin_not_found(
         seats=[],
         created_at=time[NOW],
         updated_at=time[NOW],
+        time_remaining=int(ONE_HOUR.total_seconds())
     )
     """Get an existing reservation as a user party to the reservation."""
     with pytest.raises(ResourceNotFoundException):
