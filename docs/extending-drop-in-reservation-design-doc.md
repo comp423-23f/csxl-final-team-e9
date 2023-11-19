@@ -17,16 +17,16 @@ Extending a reservation allows students currently working in the CSXL to continu
 ## User Stories
 
 **Story A:**
-As Sally Student, if the following time slot for my current seat is available and there is 30 minutes or less left of my current reservation, I want the ability to extend my drop-in seat reservation by an additional hour.
+As Sally Student, once I've created a reservation and checked-in, I want to see the time remaining in my reservation.
 
 **Story B:**
-As Sally Student, if the following time slot is reserved, I want to know that I cannot extend, and be able to see the time remaining on my reservation.
+As Sally Student, once I'm within 30 minutes of the end of my reservation, I want the option to extend. If I can't reserve because there's a reservation in the hour following mine, the button should be disactivated.
 
 **Story C:**
-As Sally Student, if I have the option to extend my current reservation, I want to be able to extend it up to an additional hour in increments of 15 minutes.
+As Sally Student, if the following time slot for my current seat is available and there is 30 minutes or less left of my current reservation, I want the ability to extend my drop-in seat reservation by an additional hour.
 
 **Story D:**
-As Sally Student, if the time slot following mine is originally reserved, but that reservation is cancelled, the option to extend my current reservation should reappear.
+As Sally Student, if I have the option to extend my current reservation, I want to be able to extend it up to an additional hour in increments of 15 minutes.
 
 **Story E:**
 As Amy Ambassador or Rhonda Root, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.

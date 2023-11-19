@@ -1,7 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, interval, map, shareReplay, switchMap, tap } from 'rxjs';
-import { Subject } from 'rxjs';
+import {
+  Observable,
+  interval,
+  map,
+  shareReplay,
+  switchMap,
+  tap,
+  Subject
+} from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
   Reservation,
