@@ -17,6 +17,7 @@ export class CoworkingReservationCard implements OnInit {
   public draftConfirmationDeadline$!: Observable<string>;
   public remainingTime: timeComponents = { hours: 0, minutes: 0, seconds: 0 };
   public thirtyMinutesLeft: boolean = false;
+  public eligibleForExtension: boolean = false;
 
   constructor(
     public router: Router,
