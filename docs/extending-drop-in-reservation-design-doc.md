@@ -6,6 +6,8 @@
 
 This feature allows students who have 30 minutes or less left in their current drop-in reservation to be able to extend it for up to an additional hour, only if no other student has reserved their current seat immediately after.
 
+Extending a reservation allows students currently working in the CSXL to continue working, while preserving a first-come first-serve reservation system. Currently, there's no way to schedule a reservation in advance, so students can't reserve a seat for back to back reservations. If a student wanted to keep working, they would have to create a new reservation as soon as their current reservation ends and hope that another student didn't reserve it right before them. The ability to extend gives slight preference to students currently working in the CSXL because they're essentially able to make a new reservation 30 minutes in advance, whereas other students can only make reservations for seats open at the current time. However, by limiting it to a 30 minute window, it prevents students from immediately reserving/extending a seat for a prolonged period of time, and for lack of better terms, hogging a seat. It encourages the circulation of students through the CSXL. If we're able to successfully implement Story F, students would have the ability to create reservations that are better fitted for their needs. 2 hours is an excessive reservation for some students, and could lead to seats in the CSXL being empty when they don't need to be.
+
 ## Key Personas
 
 **Sally Student** wants to know if her drop-in reservation can be extended and have the ability to extend it by up to an hour if so.
@@ -15,7 +17,7 @@ This feature allows students who have 30 minutes or less left in their current d
 ## User Stories
 
 **Story A:**
-As Sally Student, if the following time slot for my current seat is available and there is 30 minutes or less left of my current reservation, I want the ability to extend my drop-in seat reservation by an additional hour. 
+As Sally Student, if the following time slot for my current seat is available and there is 30 minutes or less left of my current reservation, I want the ability to extend my drop-in seat reservation by an additional hour.
 
 **Story B:**
 As Sally Student, if the following time slot is reserved, I want to know that I cannot extend, and be able to see the time remaining on my reservation.
@@ -45,7 +47,6 @@ As Sally Student, if I want to spend more or less time in the CSXL Lab than my r
 ![Confirm Reservation - Post - Available](images/wireframe/confirm_res_post_A.png)
 
 ![Extend Reservation](images/wireframe/extend_res.png)
-
 
 Based on our wireframe, the initial landing page in the CSXL Lab is titled "Make a Reservation." Here, we have integrated image icons alongside key information such as "First Name," "Last Name," "Sitterson 011," "Monitor #," the date, and start-stop clock icons. These enhancements not only add to the visual appeal of the website, but also provide the users with more intuitive information compared to the original CSXL Reservation page. We have separated the "Confirm" button and the "Time Remaining to Cancel" feature to make it more user friendly and conform to industry's standards.
 
