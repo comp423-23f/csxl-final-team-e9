@@ -670,14 +670,16 @@ class ReservationService:
                 available_seats.append(seat)
         return available_seats
 
-    #RESERVATION EXTENSION WORK BEGINS
+    # RESERVATION EXTENSION WORK BEGINS
     def get_reservation_time_remaining(self, reservation_id: int) -> int:
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
-            raise ResourceNotFoundException(f"Reservation with ID {reservation_id} not found.")
+            raise ResourceNotFoundException(
+                f"Reservation with ID {reservation_id} not found."
+            )
         return entity.time_remaining
 
-    def is_colab_open (self, time_range: TimeRange) -> bool:
+    def is_colab_open(self, time_range: TimeRange) -> bool:
         operating_hours = self._operating_hours_svc.schedule(time_range)
         return bool(operating_hours)
 
@@ -688,13 +690,16 @@ class ReservationService:
             raise ResourceNotFoundException(
                 f"Reservation with ID {reservation_id} not found."
             )
-        max_extension = min(self.check_extension_close(reservation_id), self.check_extension_overlap(reservation_id))
+        max_extension = min(
+            self.check_extension_close(reservation_id),
+            self.check_extension_overlap(reservation_id),
+        )
         return max_extension
         # could be a bool and say if == 60 true, else false
         # right now returns the maximum possible extension time by choosing the bound which limits extension
         # ex. if not closing but overlapping res, check_extension_close=60, check_extension_overlap=0 so want choose 0
         # return entity.is_eligible_for_extension()
-    
+
     def check_extension_close(self, reservation_id: int) -> int:
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
@@ -707,7 +712,7 @@ class ReservationService:
             return 0
         else:
             return 60
-        
+
     def check_extension_overlap(self, reservation_id: int) -> int:
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
@@ -723,10 +728,27 @@ class ReservationService:
         # Could also call other reservations, check for seat, etc.
         # There are a couple ways to test this but main thing is if available return 60, else 0
         # Recommend looking at _prune_seats_below_availability_threshold on line 663
-            # extension_seat_availability = self.seat_availability(extension_seats, bounds)
-            # availability = self.seat_availability(extension_seats, extension_time_range)
+        # extension_seat_availability = self.seat_availability(extension_seats, bounds)
+        # availability = self.seat_availability(extension_seats, extension_time_range)
         # if seat in availability list during extension time frame is true then return 60
         # if seat is not available and not in availability list during extension time frame then return 0
+
+        # Convert SeatEntity instances to Seat instances using the to_model method.
+        extension_seats_models = [
+            seat_entity.to_model() for seat_entity in extension_seats
+        ]
+
+        # Assuming seat_availability is a method that checks seat availability within a time range.
+        extension_seat_availability = self.seat_availability(
+            extension_seats_models, extension_time_range
+        )
+
+        # Check if the original seat is present in the available seats for extension.
+        original_seat_present = any(
+            original_seat.to_model() in extension_seats_models
+            for original_seat in entity.seats
+        )
+
         if extension_seat_availability:
             return 60
         else:
