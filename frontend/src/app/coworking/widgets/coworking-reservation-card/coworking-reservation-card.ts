@@ -15,7 +15,7 @@ export class CoworkingReservationCard implements OnInit {
   @Input() reservation!: Reservation;
 
   public draftConfirmationDeadline$!: Observable<string>;
-  public reservationCountdown$!: Observable<timeComponents>;
+  public remainingTime: timeComponents = { hours: 0, minutes: 0, seconds: 0 };
   public thirtyMinutesLeft: boolean = false;
 
   constructor(
@@ -26,6 +26,16 @@ export class CoworkingReservationCard implements OnInit {
 
   ngOnInit(): void {
     this.draftConfirmationDeadline$ = this.initDraftConfirmationDeadline();
+    this.reservationService
+      .getRemainingTime(this.reservation.id)
+      .subscribe((data) => {
+        this.remainingTime = this.secondsToTimeComponent(data);
+      });
+    this.reservationService
+      .watchRemainingTime(this.reservation.id, 1000)
+      .subscribe((data) => {
+        this.remainingTime = this.secondsToTimeComponent(data);
+      });
   }
 
   checkinDeadline(reservationStart: Date): Date {
@@ -38,7 +48,6 @@ export class CoworkingReservationCard implements OnInit {
 
   confirm() {
     this.reservationService.confirm(this.reservation).subscribe();
-    this.reservationCountdown$ = this.initReservationCountdown();
   }
 
   checkout() {
@@ -76,34 +85,13 @@ export class CoworkingReservationCard implements OnInit {
     );
   }
 
-  private initReservationCountdown(): Observable<timeComponents> {
-    const twoHours =
-      2 /* hours */ *
-      60 /* minutes */ *
-      60 /* seconds */ *
-      1000; /* milliseconds */
-
-    //const reservationDeadline = (reservation: Reservation) =>
-    //  reservation.created_at.getTime() + twoHours;
-    const reservationDeadline = (reservation: Reservation) =>
-      reservation.end.getTime();
-
-    const countdownString = (deadline: number): timeComponents => {
-      const now = new Date().getTime();
-      const delta = (deadline - now) / 1000; /* seconds */
-      const hours = Math.floor((delta / (60 * 60)) % 24);
-      const minutes = Math.floor((delta / 60) % 60);
-      const seconds = Math.floor(delta) % 60;
-      if (delta / 60 <= 30) {
-        this.thirtyMinutesLeft = true;
-      }
-      return { seconds, minutes, hours };
-    };
-
-    return timer(0, 1000).pipe(
-      map(() => this.reservation),
-      map(reservationDeadline),
-      map(countdownString)
-    );
+  private secondsToTimeComponent(totalSeconds: number): timeComponents {
+    const hours = Math.floor((totalSeconds / (60 * 60)) % 24);
+    const minutes = Math.floor((totalSeconds / 60) % 60);
+    const seconds = Math.floor(totalSeconds) % 60;
+    if (totalSeconds / 60 <= 30) {
+      this.thirtyMinutesLeft = true;
+    }
+    return { seconds, minutes, hours };
   }
 }

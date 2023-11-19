@@ -45,6 +45,15 @@ def get_reservation(
     return reservation_svc.get_reservation(subject, id)
 
 
+@api.get("/reservation/{id}/time-remaining", tags=["Coworking"])
+def get_time_remaining(
+    id: int,
+    subject: User = Depends(registered_user),
+    reservation_svc: ReservationService = Depends(),
+) -> int:
+    return reservation_svc.get_reservation(subject, id).time_remaining
+
+
 @api.put("/reservation/{id}", tags=["Coworking"])
 def update_reservation(
     reservation: ReservationPartial,

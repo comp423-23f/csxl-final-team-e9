@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, shareReplay, tap } from 'rxjs';
+import { Observable, interval, map, shareReplay, switchMap, tap } from 'rxjs';
 import {
   Reservation,
   ReservationJSON,
@@ -20,6 +20,20 @@ export class ReservationService {
     let reservation = this.getRxReservation(id);
     reservation.load();
     return reservation.value$;
+  }
+
+  getRemainingTime(reservationId: number): Observable<number> {
+    let endpoint = `/api/coworking/reservation/${reservationId}/time-remaining`;
+    return this.http.get<number>(endpoint);
+  }
+
+  watchRemainingTime(
+    reservationId: number,
+    intervalTime: number = 1000
+  ): Observable<number> {
+    return interval(intervalTime).pipe(
+      switchMap(() => this.getRemainingTime(reservationId))
+    );
   }
 
   cancel(reservation: Reservation) {
