@@ -26,16 +26,16 @@ export class CoworkingReservationCard implements OnInit {
 
   ngOnInit(): void {
     this.draftConfirmationDeadline$ = this.initDraftConfirmationDeadline();
-    this.reservationService
-      .getRemainingTime(this.reservation.id)
-      .subscribe((data) => {
-        this.remainingTime = this.secondsToTimeComponent(data);
-      });
-    this.reservationService
-      .watchRemainingTime(this.reservation.id, 1000)
-      .subscribe((data) => {
-        this.remainingTime = this.secondsToTimeComponent(data);
-      });
+    if (
+      this.reservation.state !== 'CANCELLED' &&
+      this.reservation.state !== 'CHECKED_OUT'
+    ) {
+      this.reservationService
+        .watchRemainingTime(this.reservation.id, 1000)
+        .subscribe((data) => {
+          this.remainingTime = this.secondsToTimeComponent(data);
+        });
+    }
   }
 
   checkinDeadline(reservationStart: Date): Date {
