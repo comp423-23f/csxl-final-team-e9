@@ -27,9 +27,9 @@
         <strong class="material-icons" style="color: rgb(39, 136, 205)"
           >schedule</strong
         >
-        <span id="hours"> {{ remainingTime.hours }} </span>h
-        <span id="minutes"> {{ remainingTime.minutes }} </span>m
-        <span id="seconds"> {{ remainingTime.seconds }} </span>s
+        <span id="hours"> {{ remainingTime.hours }} Hrs </span>
+        <span id="minutes"> {{ remainingTime.minutes }} Mins </span>
+        <span id="seconds"> {{ remainingTime.seconds }} Sec</span>
       </mat-card-footer>
     </mat-card-header>
 
@@ -122,7 +122,7 @@
           *ngIf="thirtyMinutesLeft"
           [disabled]="!eligibleForExtension"
           [style.background-color]="
-            eligibleForExtension ? 'rgb(39, 136, 205)' : 'rgb(0, 0, 0)'
+            eligibleForExtension ? 'rgb(39, 136, 205)' : 'rgb(0, 0, 0, 0)'
           "
           mat-stroked-button
           [routerLink]="[
