@@ -12,8 +12,6 @@ We added the timeRemaining attribute to the reservation entity. We made it a dyn
 
 ## 3. Technical and UX Design Choices
 
-At least one technical and one user experience design choice your team weighed the trade-offs with justification for the decision (we chose X over Y, because…)
-
 **Technical**:
 We created a stopTime observable to stop getRemainingTime from running every second indefinitely to preserve efficiency. We used .next() to emit a new value to the observable in the reservation service's cancel() and checkout() methods. Using console logs, we determined that this did stop it. However, when you reload the page, it started calling getRemainingTime again. To fix this, we chose to imbed the call in an if statement to check the reservation's state.
 
@@ -28,9 +26,10 @@ When deciding how to differentiate between when a user can and cannot extend, we
 
 ## 4. Development Concerns
 
-How does a new developer get started on your feature? Brief guide/tour of the files and concerns they need to understand to get up-to-speed.
-
 Most of the changes made to implement Stories A and B have been made in the following files:
-backend/services/services/coworking/reservation.py
-frontend/src/app/coworking/reservation/reservation.service.ts
-frontend/src/app/coworking/widgets/coworking-reservation-card/coworking-reservation-card.html
+
+1. backend/services/coworking/reservation.py
+2. frontend/src/app/coworking/reservation/reservation.service.ts
+3. frontend/src/app/coworking/widgets/coworking-reservation-card/coworking-reservation-card.html
+
+1 contains methods to draft, cancel, update reservations. It also has methods to retrieve the state of the CSXL at a given time. 2 contains API routes for the reservation component. 3 contains most of our frontend changes including new icons and buttons. Understanding how to manipulate reservation objects is crucial for understanding how to extend them.
