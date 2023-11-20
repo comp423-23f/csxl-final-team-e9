@@ -20,18 +20,21 @@ Extending a reservation allows students currently working in the CSXL to continu
 As Sally Student, once I've created a reservation and checked-in, I want to see the time remaining in my reservation.
 
 **Story B:**
-As Sally Student, once I'm within 30 minutes of the end of my reservation, I want the option to extend. If I can't reserve because there's a reservation in the hour following mine, the button should be disactivated.
+As Sally Student, once I'm within 30 minutes of the end of my reservation, I want the option to extend. If extending 1 hour would end within operating hours, the button to extend should be active and should bring me to a new page. If extending 1 hours would end outside of operating hours, I should see a disactivated button.
 
 **Story C:**
-As Sally Student, if the following time slot for my current seat is available and there is 30 minutes or less left of my current reservation, I want the ability to extend my drop-in seat reservation by an additional hour.
+As Sally Student, if I can't reserve because there's a reservation in the hour following mine, I should not have the option to extend.
 
 **Story D:**
-As Sally Student, if I have the option to extend my current reservation, I want to be able to extend it up to an additional hour in increments of 15 minutes.
+As Sally Student, if the following time slot for my current seat is available and there is 30 minutes or less left of my current reservation, I want the ability to extend my drop-in seat reservation by an additional hour.
 
 **Story E:**
-As Amy Ambassador or Rhonda Root, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.
+As Sally Student, if I have the option to extend my current reservation, I want to be able to extend it up to an additional hour in increments of 15 minutes.
 
 **Story F:**
+As Amy Ambassador or Rhonda Root, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.
+
+**Story G:**
 As Sally Student, if I want to spend more or less time in the CSXL Lab than my reservation is automatically calculated for, I want to be able to alter the time slots of my reservation. The initial reservation should be between 15 minutes and 2 hours.
 
 ## Wireframes
