@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Reservation } from '../../coworking.models';
-import { Observable, map, mergeMap, timer } from 'rxjs';
+import { Observable, interval, map, mergeMap, shareReplay, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { ReservationService } from '../../reservation/reservation.service';
 import { ExtensionService } from '../../reservation/extension/extension.service';
+import { timeComponents } from './timeComponents';
 
 @Component({
   selector: 'coworking-reservation-card',
@@ -14,6 +15,9 @@ export class CoworkingReservationCard implements OnInit {
   @Input() reservation!: Reservation;
 
   public draftConfirmationDeadline$!: Observable<string>;
+  public remainingTime: timeComponents = { hours: 0, minutes: 0, seconds: 0 };
+  public thirtyMinutesLeft: boolean = false;
+  public eligibleForExtension: boolean = false;
 
   constructor(
     public router: Router,
@@ -23,6 +27,16 @@ export class CoworkingReservationCard implements OnInit {
 
   ngOnInit(): void {
     this.draftConfirmationDeadline$ = this.initDraftConfirmationDeadline();
+    if (
+      this.reservation.state !== 'CANCELLED' &&
+      this.reservation.state !== 'CHECKED_OUT'
+    ) {
+      this.reservationService
+        .watchRemainingTime(this.reservation.id, 1000)
+        .subscribe((data) => {
+          this.remainingTime = this.secondsToTimeComponent(data);
+        });
+    }
   }
 
   checkinDeadline(reservationStart: Date): Date {
@@ -70,5 +84,21 @@ export class CoworkingReservationCard implements OnInit {
       map(reservationDraftDeadline),
       map(deadlineString)
     );
+  }
+
+  private secondsToTimeComponent(totalSeconds: number): timeComponents {
+    const hours = Math.floor((totalSeconds / (60 * 60)) % 24);
+    const minutes = Math.floor((totalSeconds / 60) % 60);
+    const seconds = Math.floor(totalSeconds) % 60;
+    if (totalSeconds / 60 <= 30) {
+      this.thirtyMinutesLeft = true;
+      this.reservationService
+        .getExtensionEligibility(this.reservation.id)
+        .subscribe((data) => {
+          this.eligibleForExtension = data;
+          console.log(data);
+        });
+    }
+    return { seconds, minutes, hours };
   }
 }

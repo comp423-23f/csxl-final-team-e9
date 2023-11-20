@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Reservation } from '../../coworking.models';
+import { Extension, Reservation } from '../../coworking.models';
 import { ReservationService } from '../reservation.service';
 import { Observable } from 'rxjs';
 
@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ExtensionService {
+  public reservation$: Observable<Reservation> | undefined;
+
   constructor(
     private http: HttpClient,
     private reservationService: ReservationService
@@ -17,5 +19,11 @@ export class ExtensionService {
     return this.reservationService.get(id);
   }
 
-  extend(reservation: Reservation) {}
+  extendable(id: number) {
+    let endpoint = `/api/coworking/reservation/${id}`;
+    return this.http.get<boolean>(endpoint);
+  }
+  cancel() {}
+
+  extend() {}
 }

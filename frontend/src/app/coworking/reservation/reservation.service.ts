@@ -1,6 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, shareReplay, tap } from 'rxjs';
+import {
+  Observable,
+  interval,
+  map,
+  shareReplay,
+  switchMap,
+  tap,
+  Subject
+} from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import {
   Reservation,
   ReservationJSON,
@@ -13,6 +22,7 @@ import { RxReservation } from './rx-reservation';
 })
 export class ReservationService {
   private reservations: Map<number, RxReservation> = new Map();
+  private stopTime$ = new Subject<void>();
 
   constructor(private http: HttpClient) {}
 
@@ -22,7 +32,29 @@ export class ReservationService {
     return reservation.value$;
   }
 
+  getRemainingTime(reservationId: number): Observable<number> {
+    let endpoint = `/api/coworking/reservation/${reservationId}/time-remaining`;
+    return this.http.get<number>(endpoint);
+  }
+
+  watchRemainingTime(
+    reservationId: number,
+    intervalTime: number = 1000
+  ): Observable<number> {
+    return interval(intervalTime).pipe(
+      takeUntil(this.stopTime$),
+      switchMap(() => this.getRemainingTime(reservationId))
+    );
+  }
+
+  getExtensionEligibility(reservationId: number): Observable<boolean> {
+    let endpoint = `/api/coworking/reservation/${reservationId}/extension-eligibility`;
+    return this.http.get<boolean>(endpoint);
+  }
+
   cancel(reservation: Reservation) {
+    this.stopTime$.next();
+    this.stopTime$.complete();
     let endpoint = `/api/coworking/reservation/${reservation.id}`;
     let payload = { id: reservation.id, state: 'CANCELLED' };
     return this.http.put<ReservationJSON>(endpoint, payload).pipe(
@@ -47,6 +79,8 @@ export class ReservationService {
   }
 
   checkout(reservation: Reservation) {
+    this.stopTime$.next();
+    this.stopTime$.complete();
     let endpoint = `/api/coworking/reservation/${reservation.id}`;
     let payload = { id: reservation.id, state: 'CHECKED_OUT' };
     return this.http.put<ReservationJSON>(endpoint, payload).pipe(

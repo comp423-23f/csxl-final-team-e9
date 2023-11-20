@@ -1,1 +1,6 @@
-<h1>Extension Request</h1>
+<div class="card-container">
+  <ng-container *ngIf="reservation$ | async as reservation">
+    <extend-reservation-card
+      [reservation]="reservation"></extend-reservation-card>
+  </ng-container>
+</div>
