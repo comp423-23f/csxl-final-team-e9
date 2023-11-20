@@ -47,6 +47,11 @@ export class ReservationService {
     );
   }
 
+  getExtensionEligibility(reservationId: number): Observable<boolean> {
+    let endpoint = `/api/coworking/reservation/${reservationId}/extension-eligibility`;
+    return this.http.get<boolean>(endpoint);
+  }
+
   cancel(reservation: Reservation) {
     this.stopTime$.next();
     this.stopTime$.complete();

@@ -51,7 +51,16 @@ def get_time_remaining(
     subject: User = Depends(registered_user),
     reservation_svc: ReservationService = Depends(),
 ) -> int:
-    return reservation_svc.get_reservation(subject, id).time_remaining
+    return reservation_svc.get_reservation_time_remaining(id)
+
+
+@api.get("/reservation/{id}/extension-eligibility", tags=["Coworking"])
+def get_extension_eligibility(
+    id: int,
+    subject: User = Depends(registered_user),
+    reservation_svc: ReservationService = Depends(),
+) -> bool:
+    return (reservation_svc.check_extension_eligibility(id) > 0)
 
 
 @api.put("/reservation/{id}", tags=["Coworking"])
