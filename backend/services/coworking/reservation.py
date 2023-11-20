@@ -681,7 +681,8 @@ class ReservationService:
 
     def is_colab_open(self, time_range: TimeRange) -> bool:
         operating_hours = self._operating_hours_svc.schedule(time_range)
-        return bool(operating_hours)
+        # return bool(operating_hours)
+        return (time_range.end <= operating_hours[0].end)
 
     # RESERVATION EXTENSION WORK BEGINS
     def check_extension_eligibility(self, reservation_id: int) -> int:
@@ -708,7 +709,9 @@ class ReservationService:
             )
         extension_end = entity.end + timedelta(hours=1)
         # operation_end = OperatingHours.end - timedelta(hours=1)
-        if OperatingHours.end < extension_end:
+        extension_time_range = TimeRange(start=entity.end, end=extension_end)
+        # if OperatingHours.time_range.end < extension_end:
+        if not self.is_colab_open(extension_time_range):
             return 0
         else:
             return 60
