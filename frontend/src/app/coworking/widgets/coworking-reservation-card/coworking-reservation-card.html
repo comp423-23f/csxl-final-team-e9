@@ -23,11 +23,13 @@
         <br /><br />
         Changing seats? Please check out and check back in.</mat-card-subtitle
       >
-      <mat-card-footer>
-        <strong>Time Remaining:</strong>
-        <span id="hours"> {{ remainingTime.hours }} </span>Hrs
-        <span id="minutes"> {{ remainingTime.minutes }} </span>Min
-        <span id="seconds"> {{ remainingTime.seconds }} </span>S
+      <mat-card-footer style="white-space: nowrap">
+        <strong class="material-icons" style="color: rgb(39, 136, 205)"
+          >schedule</strong
+        >
+        <span id="hours"> {{ remainingTime.hours }} Hrs </span>
+        <span id="minutes"> {{ remainingTime.minutes }} Mins </span>
+        <span id="seconds"> {{ remainingTime.seconds }} Sec</span>
       </mat-card-footer>
     </mat-card-header>
 
@@ -117,7 +119,11 @@
           Check Out
         </button>
         <button
-          [disabled]="!thirtyMinutesLeft"
+          *ngIf="thirtyMinutesLeft"
+          [disabled]="!eligibleForExtension"
+          [style.background-color]="
+            eligibleForExtension ? 'rgb(39, 136, 205)' : 'rgb(0, 0, 0, 0)'
+          "
           mat-stroked-button
           [routerLink]="[
             '/coworking/reservation/',
