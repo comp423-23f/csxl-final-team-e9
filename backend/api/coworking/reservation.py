@@ -60,7 +60,7 @@ def get_extension_eligibility(
     subject: User = Depends(registered_user),
     reservation_svc: ReservationService = Depends(),
 ) -> bool:
-    return (reservation_svc.check_extension_eligibility(id) > 0)
+    return reservation_svc.check_extension_eligibility(id) > 0
 
 
 @api.put("/reservation/{id}", tags=["Coworking"])
@@ -84,6 +84,7 @@ def cancel_reservation(
         subject, ReservationPartial(id=id, state=ReservationState.CANCELLED)
     )
 
+
 @api.post("/reservation/{id}/extend", tags=["Coworking"])
 def extend_reservation(
     id: int,
@@ -102,8 +103,9 @@ def extend_reservation(
 
     Returns:
         Reservation: The updated reservation with the new end time."""
-    return reservation_svc.extend_reservation(subject, id, extension_duration)
-  
+    return reservation_svc.extend_reservation(subject, id, extension_duration)  # type: ignore
+
+
 # @api.get("/reservation/{id}/eligible_for_extension")
 # def check_reservation_eligibility(
 #     id: int,

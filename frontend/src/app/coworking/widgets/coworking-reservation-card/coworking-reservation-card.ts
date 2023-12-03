@@ -95,8 +95,8 @@ export class CoworkingReservationCard implements OnInit {
       this.reservationService
         .getExtensionEligibility(this.reservation.id)
         .subscribe((data) => {
-          this.eligibleForExtension = data;
-          console.log(data);
+          this.eligibleForExtension = data > 0;
+          console.log(this.eligibleForExtension);
         });
     }
     return { seconds, minutes, hours };
