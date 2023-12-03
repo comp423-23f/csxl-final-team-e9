@@ -47,8 +47,8 @@ export class ReservationService {
     );
   }
 
-  getExtensionEligibility(reservationId: number): Observable<number> {
-    let endpoint = `/api/coworking/reservation/${reservationId}/extension-eligibility`;
+  getMaxExtensionTime(reservationId: number): Observable<number> {
+    let endpoint = `/api/coworking/reservation/${reservationId}/max-extension`;
     return this.http.get<number>(endpoint);
   }
 

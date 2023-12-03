@@ -93,10 +93,9 @@ export class CoworkingReservationCard implements OnInit {
     if (totalSeconds / 60 <= 30) {
       this.thirtyMinutesLeft = true;
       this.reservationService
-        .getExtensionEligibility(this.reservation.id)
+        .getMaxExtensionTime(this.reservation.id)
         .subscribe((data) => {
           this.eligibleForExtension = data > 0;
-          console.log(this.eligibleForExtension);
         });
     }
     return { seconds, minutes, hours };

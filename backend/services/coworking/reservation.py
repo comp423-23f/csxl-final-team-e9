@@ -687,7 +687,7 @@ class ReservationService:
         return time_range.end <= operating_hours[0].end
 
     # RESERVATION EXTENSION WORK BEGINS
-    def check_extension_eligibility(self, reservation_id: int) -> int:
+    def max_extension_amount(self, reservation_id: int) -> int:
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
