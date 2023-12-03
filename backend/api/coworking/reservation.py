@@ -54,13 +54,13 @@ def get_time_remaining(
     return reservation_svc.get_reservation_time_remaining(id)
 
 
-@api.get("/reservation/{id}/extension-eligibility", tags=["Coworking"])
-def get_extension_eligibility(
+@api.get("/reservation/{id}/max-extension", tags=["Coworking"])
+def get_max_extension_amount(
     id: int,
     subject: User = Depends(registered_user),
     reservation_svc: ReservationService = Depends(),
-) -> bool:
-    return reservation_svc.check_extension_eligibility(id) > 0
+) -> int:
+    return reservation_svc.max_extension_amount(id)
 
 
 @api.put("/reservation/{id}", tags=["Coworking"])
@@ -104,13 +104,3 @@ def extend_reservation(
     Returns:
         Reservation: The updated reservation with the new end time."""
     return reservation_svc.extend_reservation(subject, id, extension_duration)  # type: ignore
-
-
-# @api.get("/reservation/{id}/eligible_for_extension")
-# def check_reservation_eligibility(
-#     id: int,
-#     reservation_svc: ReservationService = Depends(),
-#     subject: User = Depends(registered_user),
-# ) -> bool:
-#     """Check if a reservation is eligible for an extension."""
-#     return reservation_svc.check_extension_eligibility(id)
