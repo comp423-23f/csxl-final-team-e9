@@ -72,9 +72,7 @@
           mat-stroked-button
           type="submit"
           color="primary"
-          (click)="confirm()">
-          {{ draftConfirmationDeadline$ | async }}
-        </button>
+          (click)="confirm()"></button>
       </ng-container>
 
       <ng-container *ngSwitchCase="'CONFIRMED'">

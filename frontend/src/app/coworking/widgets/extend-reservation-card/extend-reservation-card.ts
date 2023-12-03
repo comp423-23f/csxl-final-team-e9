@@ -14,8 +14,6 @@ export class ExtendReservationCard {
   @Input() reservation!: Reservation;
   // implements OnInit
 
-  public draftConfirmationDeadline$!: Observable<string>;
-
   constructor(
     public router: Router,
     public reservationService: ReservationService,
@@ -23,7 +21,6 @@ export class ExtendReservationCard {
   ) {}
 
   //ngOnInit(): void {
-  //this.draftConfirmationDeadline$ = this.initDraftConfirmationDeadline();
   //}
 
   confirm() {
@@ -34,31 +31,4 @@ export class ExtendReservationCard {
   cancel() {
     this.router.navigate(['/coworking/reservation/', this.reservation.id]);
   }
-
-  /*private initDraftConfirmationDeadline(): Observable<string> {
-    const fiveMinutes =
-      5  * 60  * 1000; 
-
-    const extensionDraftDeadline = (extension: Extension) =>
-      extension.created_at.getTime() + fiveMinutes;
-
-    const deadlineString = (deadline: number): string => {
-      const now = new Date().getTime();
-      const delta = (deadline - now) / 1000; 
-      if (delta > 60) {
-        return `Confirm in ${Math.ceil(delta / 60)} minutes`;
-      } else if (delta > 0) {
-        return `Confirm in ${Math.ceil(delta)} seconds`;
-      } else {
-        this.cancel();
-        return 'Cancelling...';
-      }
-    };
-
-    return timer(0, 1000).pipe(
-      map(() => this.extension),
-      map(extensionDraftDeadline),
-      map(deadlineString)
-    );
-  } */
 }
