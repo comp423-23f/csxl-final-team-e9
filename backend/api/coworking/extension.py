@@ -26,6 +26,7 @@ openapi_tags = {
 @api.put("/reservation/{id}", tags=["Coworking"])
 def extend_reservation(
     extensionRequest: ExtensionRequest,
+    # need to change extension request to integer instead of extensionRequest object
     subject: User = Depends(registered_user),
     reservation_svc: ReservationService = Depends(),
 ) -> Reservation: # type: ignore

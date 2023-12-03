@@ -3,8 +3,10 @@
 from fastapi import Depends
 from datetime import datetime, timedelta
 from random import random
-from typing import Sequence
+from typing import List, Sequence
 from sqlalchemy.orm import Session, joinedload
+
+from backend.entities.coworking import seat_entity
 from ...database import db_session
 from ...models.user import User, UserIdentity
 from ..exceptions import UserPermissionException, ResourceNotFoundException
@@ -682,7 +684,7 @@ class ReservationService:
     def is_colab_open(self, time_range: TimeRange) -> bool:
         operating_hours = self._operating_hours_svc.schedule(time_range)
         # return bool(operating_hours)
-        return (time_range.end <= operating_hours[0].end)
+        return time_range.end <= operating_hours[0].end
 
     # RESERVATION EXTENSION WORK BEGINS
     def check_extension_eligibility(self, reservation_id: int) -> int:
@@ -707,14 +709,14 @@ class ReservationService:
             raise ResourceNotFoundException(
                 f"Reservation with ID {reservation_id} not found."
             )
-        extension_end = entity.end + timedelta(hours=1)
-        # operation_end = OperatingHours.end - timedelta(hours=1)
-        extension_time_range = TimeRange(start=entity.end, end=extension_end)
-        # if OperatingHours.time_range.end < extension_end:
-        if not self.is_colab_open(extension_time_range):
-            return 0
-        else:
-            return 60
+        possibleExtension = 0
+        for increment in range(15, 75, 15):
+            extendedTimeRange = TimeRange(
+                start=entity.end, end=entity.end + timedelta(minutes=increment)
+            )
+            if self.is_colab_open(extendedTimeRange):
+                possibleExtension = increment
+        return possibleExtension
 
     def check_extension_overlap(self, reservation_id: int) -> int:
         entity = self._session.get(ReservationEntity, reservation_id)
@@ -722,37 +724,19 @@ class ReservationService:
             raise ResourceNotFoundException(
                 f"Reservation with ID {reservation_id} not found."
             )
-        reservation_end = entity.end
-        extension_end = entity.end + timedelta(hours=1)
-        extension_seats = entity.seats
-        extension_time_range = TimeRange(start=reservation_end, end=extension_end)
-        # Edit all of this however you believe necessary
-        # Should look to see if seat in available within the hour
-        # Could also call other reservations, check for seat, etc.
-        # There are a couple ways to test this but main thing is if available return 60, else 0
-        # Recommend looking at _prune_seats_below_availability_threshold on line 663
-        # extension_seat_availability = self.seat_availability(extension_seats, bounds)
-        # availability = self.seat_availability(extension_seats, extension_time_range)
-        # if seat in availability list during extension time frame is true then return 60
-        # if seat is not available and not in availability list during extension time frame then return 0
 
-        # Convert SeatEntity instances to Seat instances using the to_model method.
-        extension_seats_models = [
-            seat_entity.to_model() for seat_entity in extension_seats
-        ]
+        currentEnd = entity.end
+        currentSeats = entity.seats
+        seatModels: List[Seat] = []
+        for seat in currentSeats:
+            seatModels.append(seat.to_model())
 
-        # Assuming seat_availability is a method that checks seat availability within a time range.
-        extension_seat_availability = self.seat_availability(
-            extension_seats_models, extension_time_range
-        )
-
-        # Check if the original seat is present in the available seats for extension.
-        original_seat_present = any(
-            original_seat.to_model() in extension_seats_models
-            for original_seat in entity.seats
-        )
-
-        if extension_seat_availability:
-            return 60
-        else:
-            return 0
+        possibleExtension = 0
+        for increment in range(15, 75, 15):
+            extendedTimeRange = TimeRange(
+                start=currentEnd, end=currentEnd + timedelta(minutes=increment)
+            )
+            availability = self.seat_availability(seatModels, extendedTimeRange)
+            if len(availability) == len(currentSeats):
+                possibleExtension = increment
+        return possibleExtension
