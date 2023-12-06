@@ -92,6 +92,21 @@ export class ReservationService {
     );
   }
 
+  extend(reservation: Reservation, extensionAmount: number) {
+    let endpoint = `/api/coworking/reservation/${reservation.id}/extend`;
+    let payload = {
+      id: reservation.id,
+      extension_duration: extensionAmount
+    };
+    return this.http.put<ReservationJSON>(endpoint, payload).pipe(
+      map(parseReservationJSON),
+      tap((updatedReservation) => {
+        let rxReservation = this.getRxReservation(updatedReservation.id);
+        rxReservation.set(updatedReservation);
+      })
+    );
+  }
+
   private getRxReservation(id: number): RxReservation {
     let reservation = this.reservations.get(id);
     if (reservation === undefined) {

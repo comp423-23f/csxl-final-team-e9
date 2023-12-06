@@ -111,9 +111,3 @@ export interface ReservationRequest extends TimeRange {
   users: Profile[];
   seats: Seat[];
 }
-
-export interface Extension extends TimeRange {
-  reservation: Reservation;
-  created_at: Date;
-  state: string;
-}
