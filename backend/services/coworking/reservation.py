@@ -674,8 +674,8 @@ class ReservationService:
 
     # RESERVATION EXTENSION WORK BEGINS
     def get_reservation_time_remaining(self, reservation_id: int) -> int:
-        """
-            Method to retrieve the time_remaining attribute of an active reservation.
+        """Method to retrieve the time_remaining attribute of an active reservation.
+
         Args:
             reservation_id (int): The integer id of an active reservation.
         Returns:
@@ -691,8 +691,8 @@ class ReservationService:
         return entity.time_remaining
 
     def is_colab_open(self, time_range: TimeRange) -> bool:
-        """
-            Method to check if the XL is open for the entirety of a time range.
+        """Method to check if the XL is open for the entirety of a time range.
+
         Args:
             time_range (TimeRange): A TimeRange object representing the period of time
             in which a user would want to extend their reservation by.
@@ -722,8 +722,8 @@ class ReservationService:
         return False
 
     def max_extension_amount(self, reservation_id: int) -> int:
-        """
-            Method to retrieve the maximum amount of time a user is able to extend.
+        """Method to retrieve the maximum amount of time a user is able to extend.
+
         Args:
             reservation_id (int): The integer id of an active reservation.
         Returns:
@@ -745,7 +745,8 @@ class ReservationService:
         return max_extension
 
     def check_extension_close(self, reservation_id: int) -> int:
-        """
+        """Method evaluating if the colab is open for a given time range after a reservation.
+
         Args:
             reservation_id (int): The integer id of an active reservation.
         Returns:
@@ -769,7 +770,8 @@ class ReservationService:
         return possibleExtension
 
     def check_extension_overlap(self, reservation_id: int) -> int:
-        """
+        """Method evaluating if a given seat is open for a given time range after a reservation.
+
         Args:
             reservation_id (int): The integer id of an active reservation.
         Returns:
