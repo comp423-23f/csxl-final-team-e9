@@ -4,11 +4,13 @@ import pytest
 from unittest.mock import create_autospec
 
 from requests import session
+from backend.models.coworking.reservation import Reservation
 
 from backend.models.coworking.seat import SeatIdentity
 from backend.models.coworking.time_range import TimeRange
 from backend.models.user import UserIdentity
 from backend.services.coworking.reservation import ReservationService
+from backend.services.exceptions import ResourceNotFoundException
 from ..fixtures import (
     reservation_svc,
     permission_svc,
@@ -235,3 +237,18 @@ def test_overlapping_reservation3(
         reservation_svc.check_extension_overlap(reservation2.id) == 0
     )  # becomes 0 after reservation3 is made
     assert reservation_svc.check_extension_overlap(reservation3.id) == 60
+
+
+def test_non_existent_reservation(
+    reservation_svc: ReservationService,
+):
+    """Get extension eligibility for a non-existing reservation."""
+    with pytest.raises(ResourceNotFoundException):
+        NONEXISTENT_ID = 423
+        amt: int = reservation_svc.max_extension_amount(NONEXISTENT_ID)
+    with pytest.raises(ResourceNotFoundException):
+        NONEXISTENT_ID = 123
+        amt: int = reservation_svc.check_extension_close(NONEXISTENT_ID)
+    with pytest.raises(ResourceNotFoundException):
+        NONEXISTENT_ID = 000
+        amt: int = reservation_svc.check_extension_overlap(NONEXISTENT_ID)
