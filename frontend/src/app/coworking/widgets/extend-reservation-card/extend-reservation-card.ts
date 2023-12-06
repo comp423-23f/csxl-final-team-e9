@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Extension, Reservation } from '../../coworking.models';
+import { Reservation } from '../../coworking.models';
 import { Observable, map, mergeMap, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { ReservationService } from '../../reservation/reservation.service';
-import { ExtensionService } from '../../reservation/extension/extension.service';
 
 @Component({
   selector: 'extend-reservation-card',
@@ -16,15 +15,11 @@ export class ExtendReservationCard {
 
   constructor(
     public router: Router,
-    public reservationService: ReservationService,
-    public extensionService: ExtensionService
+    public reservationService: ReservationService
   ) {}
 
-  //ngOnInit(): void {
-  //}
-
   confirm() {
-    this.extensionService.extend();
+    // this.reservationService.extend(this.reservation, ).subscribe();
     this.router.navigate(['/coworking/reservation/', this.reservation.id]);
   }
 

@@ -800,3 +800,15 @@ class ReservationService:
             if len(reservedseats) == 0:
                 possibleExtension = increment
         return possibleExtension
+
+    def extend_reservation(self, reservation_id: int, extension_duration: int) -> Reservation:
+        entity = self._session.get(ReservationEntity, reservation_id)
+        if entity is None:
+            raise ResourceNotFoundException(
+                f"Reservation with ID {reservation_id} not found."
+            )
+        
+        # need to add validation that the end time is "allowed" (ex: after start time, within operating hours, no overlaps)
+        entity.end = entity.end + timedelta(minutes=extension_duration)
+        self._session.commit()
+        return entity.to_model()
