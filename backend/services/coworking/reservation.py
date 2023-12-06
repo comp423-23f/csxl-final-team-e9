@@ -721,6 +721,7 @@ class ReservationService:
                     return True
         return False
 
+    # RESERVATION EXTENSION WORK BEGINS
     def max_extension_amount(self, reservation_id: int) -> int:
         """Method to retrieve the maximum amount of time a user is able to extend.
 
@@ -733,6 +734,7 @@ class ReservationService:
         Raises:
             ResourceNotFoundException: if the id parameter does not match an active reservation.
         """
+
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
