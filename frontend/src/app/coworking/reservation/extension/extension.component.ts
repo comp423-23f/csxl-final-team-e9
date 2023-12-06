@@ -10,7 +10,6 @@ import {
   Route,
   Router
 } from '@angular/router';
-import { ExtensionService } from './extension.service';
 import { ReservationService } from '../reservation.service';
 
 const titleResolver: ResolveFn<string> = (
@@ -44,10 +43,10 @@ export class ExtensionComponent {
 
   constructor(
     public route: ActivatedRoute,
-    public extensionService: ExtensionService,
+    public reservationService: ReservationService,
     public router: Router
   ) {
     this.id = parseInt(route.snapshot.params['id']);
-    this.reservation$ = extensionService.get(this.id);
+    this.reservation$ = reservationService.get(this.id);
   }
 }
