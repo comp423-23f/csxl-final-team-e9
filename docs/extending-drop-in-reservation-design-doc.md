@@ -1,41 +1,30 @@
 # Feature: Extending a Drop-in Reservation
 
-> Written by Isha Atre, Chloe Carroll, Lauren Jones, and Soumya Mahavadi<br>_Last Updated: 11/01/2023_
+> Authors: <br>Isha Atre (https://github.com/Ishaatre) <br>Chloe Carroll (https://github.com/chloeecarroll) <br>Lauren Jones (https://github.com/laurennnjones) <br>Soumya Mahavadi (https://github.com/ssmahavadi) <br>_Last Updated: 12/06/2023_
 
 ## Overview
 
 This feature allows students who have 30 minutes or less left in their current drop-in reservation to be able to extend it for up to an additional hour, only if no other student has reserved their current seat immediately after.
 
-Extending a reservation allows students currently working in the CSXL to continue working, while preserving a first-come first-serve reservation system. Currently, there's no way to schedule a reservation in advance, so students can't reserve a seat for back to back reservations. If a student wanted to keep working, they would have to create a new reservation as soon as their current reservation ends and hope that another student didn't reserve it right before them. The ability to extend gives slight preference to students currently working in the CSXL because they're essentially able to make a new reservation 30 minutes in advance, whereas other students can only make reservations for seats open at the current time. However, by limiting it to a 30 minute window, it prevents students from immediately reserving/extending a seat for a prolonged period of time, and for lack of better terms, hogging a seat. It encourages the circulation of students through the CSXL. If we're able to successfully implement Story F, students would have the ability to create reservations that are better fitted for their needs. 2 hours is an excessive reservation for some students, and could lead to seats in the CSXL being empty when they don't need to be.
+Extending a reservation allows students currently working in the CSXL to continue working, while preserving a first-come first-serve reservation system. Currently, there's no way to schedule a reservation in advance and students can't reserve a seat for back to back reservations. If a student wanted to keep working, they would have to create a new reservation as soon as their current reservation ends and hope that another student didn't reserve it right before them. The ability to extend gives slight preference to students currently working in the CSXL because they're essentially able to make a new reservation 30 minutes in advance, whereas other students can only make reservations for seats open at the current time. However, by limiting it to a 30 minute window, it prevents students from immediately reserving/extending a seat for a prolonged period of time, and for lack of better terms, hogging a seat. It encourages the circulation of students through the CSXL. In the future, it would be a better use of the CSXL if students could select a more specific reservation time, as opposed to just 2 hours. Additionally, if the ability to schedule reservations in advance were implemented, being able to create reservations for only the time you need would ensure that seats aren't being left open unnecessarily. In our feature, we hoped to improve the customizability of the reservations by allowing the user to extend by 15, 30, 45, or 60 minutes depending on what they believe is necessary.
 
 ## Key Personas
 
 **Sally Student** wants to know if her drop-in reservation can be extended and have the ability to extend it by up to an hour if so.
 
-**Amy Ambassador** and **Rhonda Root** want the ability to extend Sally Student's drop-in reservation if there is no reservation immediately following it.
+**Amy Ambassador** and **Rhonda Root** want the ability to view Sally Student's extended drop-in reservation.
 
 ## User Stories
 
 **Story A:**
-As Sally Student, once I've created a reservation and checked-in, I want to see the time remaining in my reservation.
+As Sally Student, once I've created a reservation and been checked-in by an ambassador, I want to see the time remaining in my reservation.
 
 **Story B:**
-As Sally Student, once I'm within 30 minutes of the end of my reservation, I want the option to extend. If extending 1 hour would end within operating hours, the button to extend should be active and should bring me to a new page. If extending 1 hours would end outside of operating hours, I should see a disactivated button.
+As Sally Student, once I'm within 30 minutes of the end of my reservation, I want the option to extend.
+If the CSXL lab is going to be open and my current seat(s) is unreserved following my reservation, I want the ability to extend for up to the maximum time possible (increments of 15 minutes, absolute max of 1 hour).
 
 **Story C:**
-As Sally Student, if I can't reserve because there's a reservation in the hour following mine, I should not have the option to extend.
-
-**Story D:**
-As Sally Student, if the following time slot for my current seat is available and there is 30 minutes or less left of my current reservation, I want the ability to extend my drop-in seat reservation by an additional hour.
-
-**Story E:**
-As Sally Student, if I have the option to extend my current reservation, I want to be able to extend it up to an additional hour in increments of 15 minutes.
-
-**Story F:**
-As Amy Ambassador or Rhonda Root, if the time slot following Sally Student's original time slot is available for booking, I want the ability to extend the reservation on behalf of Sally Student, upon their request.
-
-**Story G:**
-As Sally Student, if I want to spend more or less time in the CSXL Lab than my reservation is automatically calculated for, I want to be able to alter the time slots of my reservation. The initial reservation should be between 15 minutes and 2 hours.
+As Amy Ambassador or Rhonda Root, I want the ability to view extended reservations. Additionally, I want the abiltiy to check-in and check-out students, and cancel reservations.
 
 ## Wireframes
 
@@ -79,4 +68,4 @@ We foresee calling upon the PUT API route found in backend/api/coworking/reserva
 
 **What concerns exist for security and privacy of data? Should the capabilities you are implementing be specific to only certain users or roles?**
 
-When Sally Student makes a reservation, only Sally Student, Amy Ambassador, and Rhonda Root should be able to cancel or extend the reservation. Other students should not be able to cancel, extend, or even view Sally Student's reservation. If Sally Student wants to extend their reservation but cannot because the next time slot is already reserved by another student, Sally should not be able to see exactly who has a reservation after them, just that they cannot extend theirs. Only Amy Ambassador and Rhonda Root should be able to see which students have current and scheduled reservations.
+When Sally Student makes a reservation, only Sally Student, Amy Ambassador, and Rhonda Root should be able to see or cancel the reservation. Other students should not be able to cancel, extend, or even view Sally Student's reservation. Only Amy Ambassador and Rhonda Root should be able to see which students have current and scheduled reservations. If Sally Student want to extend her reservation but is not permitted to, due to time constraints or other reservations, she should not be able to access the extension page by URL path /coworking/reservation/{id}/extension. That specific page should only be accessible to users who can extend their reservations.
