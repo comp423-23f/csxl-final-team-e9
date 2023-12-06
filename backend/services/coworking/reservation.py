@@ -674,6 +674,15 @@ class ReservationService:
 
     # RESERVATION EXTENSION WORK BEGINS
     def get_reservation_time_remaining(self, reservation_id: int) -> int:
+        """Method to retrieve the time_remaining attribute of an active reservation.
+
+        Args:
+            reservation_id (int): The integer id of an active reservation.
+        Returns:
+            int - The time remaining in a reservation in seconds.
+        Raises:
+            ResourceNotFoundException: if the id parameter does not match an active reservation.
+        """
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
@@ -682,12 +691,50 @@ class ReservationService:
         return entity.time_remaining
 
     def is_colab_open(self, time_range: TimeRange) -> bool:
-        operating_hours = self._operating_hours_svc.schedule(time_range)
-        # return bool(operating_hours)
-        return time_range.end <= operating_hours[0].end
+        """Method to check if the XL is open for the entirety of a time range.
+
+        Args:
+            time_range (TimeRange): A TimeRange object representing the period of time
+            in which a user would want to extend their reservation by.
+        Returns:
+            bool - True if the colab is open, else False
+        """
+        open_hours = self._operating_hours_svc.schedule(time_range)
+        if len(open_hours) == 0:
+            return False
+        open_availability_list = self._operating_hours_to_bounded_availability_list(
+            open_hours, time_range
+        )
+        if len(open_availability_list.availability) == 0:
+            return False
+        if open_availability_list.availability[0].start <= time_range.start:
+            if open_availability_list.availability[-1].end >= time_range.end:
+                if len(open_availability_list.availability) == 1:
+                    return True
+                else:
+                    for i in range(0, len(open_availability_list.availability) - 1):
+                        if (
+                            open_availability_list.availability[i].end
+                            < open_availability_list.availability[i + 1].start
+                        ):
+                            return False
+                    return True
+        return False
 
     # RESERVATION EXTENSION WORK BEGINS
     def max_extension_amount(self, reservation_id: int) -> int:
+        """Method to retrieve the maximum amount of time a user is able to extend.
+
+        Args:
+            reservation_id (int): The integer id of an active reservation.
+        Returns:
+            int - a 15-minute increment between 0 and 60 minutes representing the maximum amount
+              of time a user could extend their reservation without going outside of operating hours
+              or overlapping with another student's reservation.
+        Raises:
+            ResourceNotFoundException: if the id parameter does not match an active reservation.
+        """
+
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
@@ -698,12 +745,18 @@ class ReservationService:
             self.check_extension_overlap(reservation_id),
         )
         return max_extension
-        # could be a bool and say if == 60 true, else false
-        # right now returns the maximum possible extension time by choosing the bound which limits extension
-        # ex. if not closing but overlapping res, check_extension_close=60, check_extension_overlap=0 so want choose 0
-        # return entity.is_eligible_for_extension()
 
     def check_extension_close(self, reservation_id: int) -> int:
+        """Method evaluating if the colab is open for a given time range after a reservation.
+
+        Args:
+            reservation_id (int): The integer id of an active reservation.
+        Returns:
+            int - a 15-minute increment between 0 and 60 minutes representing the maximum amount
+              of time a user could extend their reservation without going outside of operating hours.
+        Raises:
+            ResourceNotFoundException: if the id parameter does not match an active reservation.
+        """
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
@@ -719,25 +772,34 @@ class ReservationService:
         return possibleExtension
 
     def check_extension_overlap(self, reservation_id: int) -> int:
+        """Method evaluating if a given seat is open for a given time range after a reservation.
+
+        Args:
+            reservation_id (int): The integer id of an active reservation.
+        Returns:
+            int - a 15-minute increment between 0 and 60 minutes representing the maximum amount
+              of time a user could extend their reservation without overlapping with another
+              student's reservation.
+        Raises:
+            ResourceNotFoundException: if the id parameter does not match an active reservation.
+        """
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
                 f"Reservation with ID {reservation_id} not found."
             )
-
         currentEnd = entity.end
         currentSeats = entity.seats
         seatModels: List[Seat] = []
         for seat in currentSeats:
             seatModels.append(seat.to_model())
-
         possibleExtension = 0
         for increment in range(15, 75, 15):
             extendedTimeRange = TimeRange(
                 start=currentEnd, end=currentEnd + timedelta(minutes=increment)
             )
-            availability = self.seat_availability(seatModels, extendedTimeRange)
-            if len(availability) == len(currentSeats):
+            reservedseats = self.get_seat_reservations(seatModels, extendedTimeRange)
+            if len(reservedseats) == 0:
                 possibleExtension = increment
         return possibleExtension
 
