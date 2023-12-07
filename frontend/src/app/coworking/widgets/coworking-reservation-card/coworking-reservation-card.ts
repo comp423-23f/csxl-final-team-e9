@@ -17,6 +17,7 @@ export class CoworkingReservationCard implements OnInit {
   public remainingTime: timeComponents = { hours: 0, minutes: 0, seconds: 0 };
   public thirtyMinutesLeft: boolean = false;
   public eligibleForExtension: boolean = false;
+  public maxExtendAmount: number = 0;
 
   constructor(
     public router: Router,
@@ -89,9 +90,18 @@ export class CoworkingReservationCard implements OnInit {
       this.reservationService
         .getMaxExtensionTime(this.reservation.id)
         .subscribe((data) => {
+          this.maxExtendAmount = data;
           this.eligibleForExtension = data > 0;
         });
     }
     return { seconds, minutes, hours };
+  }
+
+  getExtensionIntervals(): number[] {
+    let intervals = [];
+    for (let i = 15; i <= this.maxExtendAmount; i += 15) {
+      intervals.push(i);
+    }
+    return intervals;
   }
 }
