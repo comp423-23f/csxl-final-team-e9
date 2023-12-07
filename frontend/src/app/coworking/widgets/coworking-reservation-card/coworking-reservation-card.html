@@ -89,6 +89,20 @@
       <strong>The XL Colab in Sitterson 156</strong>
     </h3>
 
+    <div *ngIf="thirtyMinutesLeft">
+      <h3>
+        <span class="material-icons" style="color: rgb(39, 136, 205)"
+          >alarm_add</span
+        >
+        <strong>Extension Options:</strong>
+      </h3>
+      <ul>
+        <li *ngFor="let interval of getExtensionIntervals()">
+          {{ interval }} minutes
+        </li>
+      </ul>
+    </div>
+
     <mat-card-actions align="end" [ngSwitch]="reservation.state">
       <ng-container *ngSwitchCase="'DRAFT'">
         <button mat-stroked-button type="submit" (click)="cancel()">

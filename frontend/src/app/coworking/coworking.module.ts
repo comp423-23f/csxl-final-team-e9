@@ -1,21 +1,32 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+/* Coworking */
 import { CoworkingRoutingModule } from './coworking-routing.module';
 import { CoworkingPageComponent } from './coworking-home/coworking-home.component';
-import { AmbassadorPageComponent } from './ambassador-home/ambassador-home.component';
-import { MatCardModule } from '@angular/material/card';
 import { CoworkingReservationCard } from './widgets/coworking-reservation-card/coworking-reservation-card';
-import { MatDividerModule } from '@angular/material/divider';
 import { CoworkingDropInCard } from './widgets/dropin-availability-card/dropin-availability-card.widget';
-import { MatListModule } from '@angular/material/list';
 import { CoworkingHoursCard } from './widgets/operating-hours-panel/operating-hours-panel.widget';
+
+/* Ambassador */
+import { AmbassadorPageComponent } from './ambassador-home/ambassador-home.component';
+
+/* Reservation */
+import { ReservationComponent } from './reservation/reservation.component';
+
+/* Extension */
+import { ExtensionComponent } from './reservation/extension/extension.component';
+import { ExtendReservationCard } from './widgets/extend-reservation-card/extend-reservation-card';
+
+/* Material UI Dependencies */
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-import { ReservationComponent } from './reservation/reservation.component';
-import { ExtensionComponent } from './reservation/extension/extension.component';
-import { ExtendReservationCard } from './widgets/extend-reservation-card/extend-reservation-card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -37,6 +48,8 @@ import { ExtendReservationCard } from './widgets/extend-reservation-card/extend-
     MatExpansionModule,
     MatButtonModule,
     MatTableModule,
+    MatDatepickerModule,
+    MatSelectModule,
     AsyncPipe
   ]
 })
