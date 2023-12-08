@@ -25,13 +25,18 @@
         <br /><br />
         Changing seats? Please check out and check back in.
       </mat-card-subtitle>
-      <mat-card-footer style="white-space: nowrap">
-        <strong class="material-icons" style="color: rgb(39, 136, 205)">
-          schedule
-        </strong>
-        <span id="hours"> {{ remainingTime.hours }} Hrs </span>
-        <span id="minutes"> {{ remainingTime.minutes }} Mins </span>
-        <span id="seconds"> {{ remainingTime.seconds }} Sec</span>
+      <mat-card-footer>
+        <div style="display: flex; align-items: center; white-space: nowrap">
+          <strong
+            class="material-icons"
+            style="color: rgb(39, 136, 205); margin-right: 8px">
+            schedule
+          </strong>
+          <span>
+            {{ remainingTime.hours }} Hrs {{ remainingTime.minutes }} Mins
+            {{ remainingTime.seconds }} Sec
+          </span>
+        </div>
       </mat-card-footer>
     </mat-card-header>
 
