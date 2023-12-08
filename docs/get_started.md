@@ -34,7 +34,7 @@ If you see an error on your first attempt, retry once. If the error persists, do
 Once the Dev Container begins, open a terminal and complete the following:
 
 1. Install frontend dependencies:
-    1. `pushd frontend` 
+    1. `pushd frontend`
     2. `npm install`
     3. `popd`
 2. Reload the VS Code Window to ensure plugins are properly loaded:
