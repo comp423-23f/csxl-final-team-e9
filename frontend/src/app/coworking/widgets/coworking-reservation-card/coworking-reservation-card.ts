@@ -22,6 +22,7 @@ export class CoworkingReservationCard implements OnInit {
   public eligibleForExtension: boolean = false;
   public maxExtendAmount: number = 0;
   public extendPressed: boolean = false;
+  private hasExtendReloaded: boolean = false;
 
   constructor(
     public router: Router,
@@ -40,6 +41,12 @@ export class CoworkingReservationCard implements OnInit {
           this.remainingTime = this.secondsToTimeComponent(data);
         });
     }
+    setInterval(() => {
+      if (this.thirtyMinutesLeft && !this.hasExtendReloaded) {
+        window.location.reload();
+        this.hasExtendReloaded = true;
+      }
+    }, 60000);
   }
 
   checkinDeadline(reservationStart: Date): Date {
@@ -63,6 +70,7 @@ export class CoworkingReservationCard implements OnInit {
       .extend(this.reservation, this.extendAmount.value)
       .subscribe();
     window.location.reload();
+    this.hasExtendReloaded = false;
   }
 
   private initDraftConfirmationDeadline(): Observable<string> {
