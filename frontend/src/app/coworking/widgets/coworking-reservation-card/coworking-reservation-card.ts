@@ -4,6 +4,7 @@ import { Observable, interval, map, mergeMap, shareReplay, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { ReservationService } from '../../reservation/reservation.service';
 import { timeComponents } from './timeComponents';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'coworking-reservation-card',
@@ -103,5 +104,38 @@ export class CoworkingReservationCard implements OnInit {
       intervals.push(i);
     }
     return intervals;
+  }
+
+  formatReservationTimes(start: Date, end: Date): string {
+    const startTime = this.formatTime(start);
+    const endTime = this.formatTime(end);
+
+    if (
+      (startTime.endsWith('AM') && endTime.endsWith('AM')) ||
+      (startTime.endsWith('PM') && endTime.endsWith('PM'))
+    ) {
+      return `${startTime.slice(0, -3)} - ${endTime}`;
+    }
+
+    return `${startTime} - ${endTime}`;
+  }
+
+  private formatTime(date: Date): string {
+    return formatDate(date, 'shortTime', 'en-US');
+  }
+
+  generateNotEligibleForExtensionMessage(): boolean {
+    const closingTime = new Date();
+    const reservationEndTime = this.reservation.end;
+
+    // Calculate the threshold time (closing time - 15 minutes)
+    const thresholdTime = new Date(closingTime.getTime() - 15 * 60 * 1000);
+
+    // Identifies the reason
+    if (reservationEndTime >= thresholdTime) {
+      return false; // Operating Hours
+    } else {
+      return true; // Overlapping Reservation
+    }
   }
 }
