@@ -744,6 +744,12 @@ class ReservationService:
             self.check_extension_close(reservation_id),
             self.check_extension_overlap(reservation_id),
         )
+
+        if max_extension == 0:
+            if self.check_extension_close(reservation_id) == 0:
+                return -1 # cannot extend because of operating hours
+            return -2 # cannot extend because of overlapping reservation
+
         return max_extension
 
     def check_extension_close(self, reservation_id: int) -> int:
@@ -804,13 +810,33 @@ class ReservationService:
         return possibleExtension
 
     def extend_reservation(self, reservation_id: int, extension_duration: int) -> Reservation:
+        """Method to extend the end time of a reservation.
+
+        Args:
+            reservation_id (int): The integer id of an active reservation.
+            extension_duration (int): The amount of time to extend the reservation by, in minutes.
+        Returns:
+            Reservation - the current reservation after extending its end time.
+        Raises:
+            ResourceNotFoundException: if the id parameter does not match an active reservation.
+            ReservationException: if the proposed extension would run past operating hours or overlap
+             with another student's reservation.
+        """
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
                 f"Reservation with ID {reservation_id} not found."
             )
         
-        # need to add validation that the end time is "allowed" (ex: after start time, within operating hours, no overlaps)
+        if (extension_duration < 0):
+            raise ReservationException("Extension amount must be positive.")
+
+        if (extension_duration > self.max_extension_amount(reservation_id)):
+            if (extension_duration > self.check_extension_close(reservation_id)):
+                raise ReservationException("Extension must be within operating hours of XL Lab.")
+            else:
+                raise ReservationException("Extension overlaps with another student's reservation.")
+
         entity.end = entity.end + timedelta(minutes=extension_duration)
         self._session.commit()
         return entity.to_model()

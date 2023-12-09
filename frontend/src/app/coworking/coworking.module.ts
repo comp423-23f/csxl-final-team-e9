@@ -14,10 +14,6 @@ import { AmbassadorPageComponent } from './ambassador-home/ambassador-home.compo
 /* Reservation */
 import { ReservationComponent } from './reservation/reservation.component';
 
-/* Extension */
-import { ExtensionComponent } from './reservation/extension/extension.component';
-import { ExtendReservationCard } from './widgets/extend-reservation-card/extend-reservation-card';
-
 /* Material UI Dependencies */
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -35,9 +31,7 @@ import { MatSelectModule } from '@angular/material/select';
     AmbassadorPageComponent,
     CoworkingDropInCard,
     CoworkingReservationCard,
-    CoworkingHoursCard,
-    ExtensionComponent,
-    ExtendReservationCard
+    CoworkingHoursCard
   ],
   imports: [
     CommonModule,

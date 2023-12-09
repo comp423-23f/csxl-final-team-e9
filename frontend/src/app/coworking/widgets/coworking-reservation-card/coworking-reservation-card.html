@@ -122,7 +122,7 @@
 
         <!-- Extension Eligibility Message and Dropdown -->
         <div
-          *ngIf="thirtyMinutesLeft && eligibleForExtension"
+          *ngIf="thirtyMinutesLeft && eligibleForExtension && extendPressed"
           class="extension-options">
           <div class="flex-container">
             <span class="icon">
@@ -133,7 +133,7 @@
             <strong class="text">Extend by</strong>
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>minutes</mat-label>
-              <mat-select>
+              <mat-select #extendAmountElement>
                 <mat-option
                   *ngFor="let interval of getExtensionIntervals()"
                   [value]="interval">
@@ -149,13 +149,13 @@
           *ngIf="thirtyMinutesLeft && !eligibleForExtension"
           class="extension-options">
           <mat-card-subtitle
-            *ngIf="!generateNotEligibleForExtensionMessage()"
+            *ngIf="maxExtendAmount === -1"
             class="extension-message">
             Reservation cannot be extended due to operating hours.
           </mat-card-subtitle>
 
           <mat-card-subtitle
-            *ngIf="generateNotEligibleForExtensionMessage()"
+            *ngIf="maxExtendAmount === -2"
             class="extension-message">
             Reservation cannot be extended because the location is already
             reserved.
@@ -198,15 +198,26 @@
           Check Out
         </button>
         <button
-          *ngIf="thirtyMinutesLeft"
+          *ngIf="thirtyMinutesLeft && !extendPressed"
           [disabled]="!eligibleForExtension"
           [style.background-color]="
             eligibleForExtension ? 'rgb(39, 136, 205)' : 'rgb(0, 0, 0, 0)'
           "
           mat-stroked-button
-          [routerLink]="['/coworking/reservation/', reservation.id]"
+          (click)="extendPressed = true"
           style="margin-left: 10px">
           Extend
+        </button>
+        <button
+          *ngIf="thirtyMinutesLeft && extendPressed"
+          [disabled]="!eligibleForExtension"
+          [style.background-color]="
+            eligibleForExtension ? 'rgb(39, 136, 205)' : 'rgb(0, 0, 0, 0)'
+          "
+          (click)="extend()"
+          mat-stroked-button
+          style="margin-left: 10px">
+          Confirm Extension
         </button>
       </ng-container>
 

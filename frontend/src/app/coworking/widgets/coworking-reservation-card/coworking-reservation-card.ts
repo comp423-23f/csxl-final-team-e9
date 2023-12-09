@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Reservation } from '../../coworking.models';
 import { Observable, interval, map, mergeMap, shareReplay, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { ReservationService } from '../../reservation/reservation.service';
 import { timeComponents } from './timeComponents';
 import { formatDate } from '@angular/common';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'coworking-reservation-card',
@@ -13,12 +14,14 @@ import { formatDate } from '@angular/common';
 })
 export class CoworkingReservationCard implements OnInit {
   @Input() reservation!: Reservation;
+  @ViewChild('extendAmountElement') extendAmount!: MatSelect;
 
   public draftConfirmationDeadline$!: Observable<string>;
   public remainingTime: timeComponents = { hours: 0, minutes: 0, seconds: 0 };
   public thirtyMinutesLeft: boolean = false;
   public eligibleForExtension: boolean = false;
   public maxExtendAmount: number = 0;
+  public extendPressed: boolean = false;
 
   constructor(
     public router: Router,
@@ -53,6 +56,13 @@ export class CoworkingReservationCard implements OnInit {
 
   checkout() {
     this.reservationService.checkout(this.reservation).subscribe();
+  }
+
+  extend() {
+    this.reservationService
+      .extend(this.reservation, this.extendAmount.value)
+      .subscribe();
+    window.location.reload();
   }
 
   private initDraftConfirmationDeadline(): Observable<string> {
@@ -122,20 +132,5 @@ export class CoworkingReservationCard implements OnInit {
 
   private formatTime(date: Date): string {
     return formatDate(date, 'shortTime', 'en-US');
-  }
-
-  generateNotEligibleForExtensionMessage(): boolean {
-    const closingTime = new Date();
-    const reservationEndTime = this.reservation.end;
-
-    // Calculate the threshold time (closing time - 15 minutes)
-    const thresholdTime = new Date(closingTime.getTime() - 15 * 60 * 1000);
-
-    // Identifies the reason
-    if (reservationEndTime >= thresholdTime) {
-      return false; // Operating Hours
-    } else {
-      return true; // Overlapping Reservation
-    }
   }
 }
