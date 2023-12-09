@@ -14,6 +14,13 @@ import { AmbassadorPageComponent } from './ambassador-home/ambassador-home.compo
 /* Reservation */
 import { ReservationComponent } from './reservation/reservation.component';
 
+<<<<<<< HEAD
+=======
+/* Extension */
+import { ExtensionComponent } from './reservation/extension/extension.component';
+import { ExtendReservationCard } from './widgets/extend-reservation-card/extend-reservation-card';
+
+>>>>>>> sprint-2
 /* Material UI Dependencies */
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';

@@ -789,6 +789,7 @@ class ReservationService:
         Raises:
             ResourceNotFoundException: if the id parameter does not match an active reservation.
         """
+<<<<<<< HEAD
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
@@ -822,11 +823,14 @@ class ReservationService:
             ReservationException: if the proposed extension would run past operating hours or overlap
              with another student's reservation.
         """
+=======
+>>>>>>> sprint-2
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
                 f"Reservation with ID {reservation_id} not found."
             )
+<<<<<<< HEAD
 
         if (extension_duration < 0):
             raise ReservationException("Extension amount must be positive.")
@@ -837,6 +841,31 @@ class ReservationService:
             else:
                 raise ReservationException("Extension overlaps with another student's reservation.")
 
+=======
+        currentEnd = entity.end
+        currentSeats = entity.seats
+        seatModels: List[Seat] = []
+        for seat in currentSeats:
+            seatModels.append(seat.to_model())
+        possibleExtension = 0
+        for increment in range(15, 75, 15):
+            extendedTimeRange = TimeRange(
+                start=currentEnd, end=currentEnd + timedelta(minutes=increment)
+            )
+            reservedseats = self.get_seat_reservations(seatModels, extendedTimeRange)
+            if len(reservedseats) == 0:
+                possibleExtension = increment
+        return possibleExtension
+
+    def extend_reservation(self, reservation_id: int, extension_duration: int) -> Reservation:
+        entity = self._session.get(ReservationEntity, reservation_id)
+        if entity is None:
+            raise ResourceNotFoundException(
+                f"Reservation with ID {reservation_id} not found."
+            )
+        
+        # need to add validation that the end time is "allowed" (ex: after start time, within operating hours, no overlaps)
+>>>>>>> sprint-2
         entity.end = entity.end + timedelta(minutes=extension_duration)
         self._session.commit()
         return entity.to_model()
