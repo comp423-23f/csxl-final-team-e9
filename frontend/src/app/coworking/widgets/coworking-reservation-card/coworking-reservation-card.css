@@ -1,30 +1,117 @@
+/* Basic Card Styles */
 .mat-mdc-card {
-    max-width: 660px;
-    margin: 0;
+  max-width: 660px;
+  margin: 0;
 }
 
 .mat-mdc-card-header {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .mat-mdc-card-actions {
-    margin-top: 16px;
+  margin-top: 16px;
 }
 
 .mat-divider {
-    margin: 1em 0;
+  margin: 1em 0;
 }
 
+/* Heading, Paragraph, and Button Styles */
 h3 {
-    font-size: 18px;
-    display: flex;
-    align-items: center;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
 }
 
-h3>span {
-    margin-right: 8px;
+h3 > span {
+  margin-right: 8px;
+}
+
+.user-name {
+  margin-left: 10px;
 }
 
 p {
-    margin-left: 64px;
+  margin-left: 64px;
+}
+
+.action-buttons button {
+  margin-right: 30px;
+}
+
+/* Flex Container for Time and Extension Information */
+.horizontal-flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time-and-extension {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+}
+
+.time-display {
+  flex: 2;
+}
+
+.extension-options {
+  flex: 3; 
+}
+
+/* Flex Container for Main Elements */
+.flex-container {
+  display: flex;
+  align-items: center;
+}
+
+.flex-container .text, .flex-container .material-icons, .flex-container .icon {
+  margin-right: 4px;
+  align-self: center;
+}
+
+.flex-container .text {
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.flex-container mat-form-field {
+  width: auto;
+  font-size: 16px;
+  line-height: 1.2;
+  padding: 4px 0;
+  align-self: center;
+}
+
+.flex-container mat-form-field .mat-input-element {
+  height: auto;
+  padding: 0 4px;
+}
+
+/* Seat and Location Styles */
+.horizontal-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.seat {
+  flex: 2;
+}
+
+.location {
+  flex: 3;
+}
+
+.time-and-check-in mat-card-subtitle {
+  margin-top: 2px;
+  margin-left: 32px;
 }
