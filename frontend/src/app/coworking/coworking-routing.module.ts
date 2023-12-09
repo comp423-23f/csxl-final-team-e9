@@ -3,13 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { CoworkingPageComponent } from './coworking-home/coworking-home.component';
 import { AmbassadorPageComponent } from './ambassador-home/ambassador-home.component';
 import { ReservationComponent } from './reservation/reservation.component';
-import { ExtensionComponent } from './reservation/extension/extension.component';
 
 const routes: Routes = [
   CoworkingPageComponent.Route,
   ReservationComponent.Route,
-  AmbassadorPageComponent.Route,
-  ExtensionComponent.Route
+  AmbassadorPageComponent.Route
 ];
 
 @NgModule({
