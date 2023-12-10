@@ -678,8 +678,10 @@ class ReservationService:
 
         Args:
             reservation_id (int): The integer id of an active reservation.
+        
         Returns:
             int - The time remaining in a reservation in seconds.
+       
         Raises:
             ResourceNotFoundException: if the id parameter does not match an active reservation.
         """
@@ -696,6 +698,7 @@ class ReservationService:
         Args:
             time_range (TimeRange): A TimeRange object representing the period of time
             in which a user would want to extend their reservation by.
+
         Returns:
             bool - True if the colab is open, else False
         """
@@ -721,17 +724,18 @@ class ReservationService:
                     return True
         return False
 
-    # RESERVATION EXTENSION WORK BEGINS
     def max_extension_amount(self, reservation_id: int) -> int:
         """Method to retrieve the maximum amount of time a user is able to extend.
 
         Args:
             reservation_id (int): The integer id of an active reservation.
+       
         Returns:
             int: -1 if a user cannot extend due to operating hours, -2 if a user cannot extend due to an
               overlapping reservation, or a 15-minute increment between 15 and 60 minutes representing the maximum amount
               of time a user could extend their reservation without going outside of operating hours
               or overlapping with another student's reservation.
+        
         Raises:
             ResourceNotFoundException: if the id parameter does not match an active reservation.
         """
@@ -758,9 +762,11 @@ class ReservationService:
 
         Args:
             reservation_id (int): The integer id of an active reservation.
+        
         Returns:
             int - a 15-minute increment between 0 and 60 minutes representing the maximum amount
               of time a user could extend their reservation without going outside of operating hours.
+        
         Raises:
             ResourceNotFoundException: if the id parameter does not match an active reservation.
         """
@@ -783,10 +789,12 @@ class ReservationService:
 
         Args:
             reservation_id (int): The integer id of an active reservation.
+        
         Returns:
             int - a 15-minute increment between 0 and 60 minutes representing the maximum amount
               of time a user could extend their reservation without overlapping with another
               student's reservation.
+        
         Raises:
             ResourceNotFoundException: if the id parameter does not match an active reservation.
         """
@@ -818,8 +826,10 @@ class ReservationService:
         Args:
             reservation_id (int): The integer id of an active reservation.
             extension_duration (int): The amount of time to extend the reservation by, in minutes.
+        
         Returns:
-            Reservation - the current reservation after extending its end time.
+            Reservation - the current reservation, updated with an extended time.
+        
         Raises:
             ResourceNotFoundException: if the id parameter does not match an active reservation.
             ReservationException: if the proposed extension would run past operating hours or overlap
