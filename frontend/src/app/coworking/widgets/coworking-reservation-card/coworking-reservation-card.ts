@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Reservation } from '../../coworking.models';
-import { Observable, interval, map, mergeMap, shareReplay, timer } from 'rxjs';
+import { Observable, map, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { ReservationService } from '../../reservation/reservation.service';
 import { timeComponents } from './timeComponents';
@@ -20,9 +20,9 @@ export class CoworkingReservationCard implements OnInit {
   public remainingTime: timeComponents = { hours: 0, minutes: 0, seconds: 0 };
   public thirtyMinutesLeft: boolean = false;
   public eligibleForExtension: boolean = false;
-  public maxExtendAmount: number = 0;
   public extendPressed: boolean = false;
   private hasExtendReloaded: boolean = false;
+  public maxExtendAmount: number = 0;
 
   constructor(
     public router: Router,
