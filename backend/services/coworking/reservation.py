@@ -3,8 +3,10 @@
 from fastapi import Depends
 from datetime import datetime, timedelta
 from random import random
-from typing import Sequence
+from typing import List, Sequence
 from sqlalchemy.orm import Session, joinedload
+
+from backend.entities.coworking import seat_entity
 from ...database import db_session
 from ...models.user import User, UserIdentity
 from ..exceptions import UserPermissionException, ResourceNotFoundException
@@ -672,6 +674,17 @@ class ReservationService:
 
     # RESERVATION EXTENSION WORK BEGINS
     def get_reservation_time_remaining(self, reservation_id: int) -> int:
+        """Method to retrieve the time_remaining attribute of an active reservation.
+
+        Args:
+            reservation_id (int): The integer id of an active reservation.
+        
+        Returns:
+            int - The time remaining in a reservation in seconds.
+       
+        Raises:
+            ResourceNotFoundException: if the id parameter does not match an active reservation.
+        """
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
@@ -680,12 +693,53 @@ class ReservationService:
         return entity.time_remaining
 
     def is_colab_open(self, time_range: TimeRange) -> bool:
-        operating_hours = self._operating_hours_svc.schedule(time_range)
-        # return bool(operating_hours)
-        return (time_range.end <= operating_hours[0].end)
+        """Method to check if the XL is open for the entirety of a time range.
 
-    # RESERVATION EXTENSION WORK BEGINS
-    def check_extension_eligibility(self, reservation_id: int) -> int:
+        Args:
+            time_range (TimeRange): A TimeRange object representing the period of time
+            in which a user would want to extend their reservation by.
+
+        Returns:
+            bool - True if the colab is open, else False
+        """
+        open_hours = self._operating_hours_svc.schedule(time_range)
+        if len(open_hours) == 0:
+            return False
+        open_availability_list = self._operating_hours_to_bounded_availability_list(
+            open_hours, time_range
+        )
+        if len(open_availability_list.availability) == 0:
+            return False
+        if open_availability_list.availability[0].start <= time_range.start:
+            if open_availability_list.availability[-1].end >= time_range.end:
+                if len(open_availability_list.availability) == 1:
+                    return True
+                else:
+                    for i in range(0, len(open_availability_list.availability) - 1):
+                        if (
+                            open_availability_list.availability[i].end
+                            < open_availability_list.availability[i + 1].start
+                        ):
+                            return False
+                    return True
+        return False
+
+    def max_extension_amount(self, reservation_id: int) -> int:
+        """Method to retrieve the maximum amount of time a user is able to extend.
+
+        Args:
+            reservation_id (int): The integer id of an active reservation.
+       
+        Returns:
+            int: -1 if a user cannot extend due to operating hours, -2 if a user cannot extend due to an
+              overlapping reservation, or a 15-minute increment between 15 and 60 minutes representing the maximum amount
+              of time a user could extend their reservation without going outside of operating hours
+              or overlapping with another student's reservation.
+        
+        Raises:
+            ResourceNotFoundException: if the id parameter does not match an active reservation.
+        """
+
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
@@ -695,64 +749,117 @@ class ReservationService:
             self.check_extension_close(reservation_id),
             self.check_extension_overlap(reservation_id),
         )
+
+        if max_extension == 0:
+            if self.check_extension_close(reservation_id) == 0:
+                return -1  # cannot extend because of operating hours
+            return -2  # cannot extend because of overlapping reservation
+
         return max_extension
-        # could be a bool and say if == 60 true, else false
-        # right now returns the maximum possible extension time by choosing the bound which limits extension
-        # ex. if not closing but overlapping res, check_extension_close=60, check_extension_overlap=0 so want choose 0
-        # return entity.is_eligible_for_extension()
 
     def check_extension_close(self, reservation_id: int) -> int:
+        """Method evaluating if the colab is open for a given time range after a reservation.
+
+        Args:
+            reservation_id (int): The integer id of an active reservation.
+        
+        Returns:
+            int - a 15-minute increment between 0 and 60 minutes representing the maximum amount
+              of time a user could extend their reservation without going outside of operating hours.
+        
+        Raises:
+            ResourceNotFoundException: if the id parameter does not match an active reservation.
+        """
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
                 f"Reservation with ID {reservation_id} not found."
             )
-        extension_end = entity.end + timedelta(hours=1)
-        # operation_end = OperatingHours.end - timedelta(hours=1)
-        extension_time_range = TimeRange(start=entity.end, end=extension_end)
-        # if OperatingHours.time_range.end < extension_end:
-        if not self.is_colab_open(extension_time_range):
-            return 0
-        else:
-            return 60
+        possibleExtension = 0
+        for increment in range(15, 75, 15):
+            extendedTimeRange = TimeRange(
+                start=entity.end, end=entity.end + timedelta(minutes=increment)
+            )
+            if self.is_colab_open(extendedTimeRange):
+                possibleExtension = increment
+        return possibleExtension
 
     def check_extension_overlap(self, reservation_id: int) -> int:
+        """Method evaluating if a given seat is open for a given time range after a reservation.
+
+        Args:
+            reservation_id (int): The integer id of an active reservation.
+        
+        Returns:
+            int - a 15-minute increment between 0 and 60 minutes representing the maximum amount
+              of time a user could extend their reservation without overlapping with another
+              student's reservation.
+        
+        Raises:
+            ResourceNotFoundException: if the id parameter does not match an active reservation.
+        """
         entity = self._session.get(ReservationEntity, reservation_id)
         if entity is None:
             raise ResourceNotFoundException(
                 f"Reservation with ID {reservation_id} not found."
             )
-        reservation_end = entity.end
-        extension_end = entity.end + timedelta(hours=1)
-        extension_seats = entity.seats
-        extension_time_range = TimeRange(start=reservation_end, end=extension_end)
-        # Edit all of this however you believe necessary
-        # Should look to see if seat in available within the hour
-        # Could also call other reservations, check for seat, etc.
-        # There are a couple ways to test this but main thing is if available return 60, else 0
-        # Recommend looking at _prune_seats_below_availability_threshold on line 663
-        # extension_seat_availability = self.seat_availability(extension_seats, bounds)
-        # availability = self.seat_availability(extension_seats, extension_time_range)
-        # if seat in availability list during extension time frame is true then return 60
-        # if seat is not available and not in availability list during extension time frame then return 0
+        currentEnd = entity.end
+        currentSeats = entity.seats
+        seatModels: List[Seat] = []
+        for seat in currentSeats:
+            seatModels.append(seat.to_model())
+        possibleExtension = 0
+        for increment in range(15, 75, 15):
+            extendedTimeRange = TimeRange(
+                start=currentEnd, end=currentEnd + timedelta(minutes=increment)
+            )
+            reservedseats = self.get_seat_reservations(seatModels, extendedTimeRange)
+            if len(reservedseats) == 0:
+                possibleExtension = increment
+        return possibleExtension
 
-        # Convert SeatEntity instances to Seat instances using the to_model method.
-        extension_seats_models = [
-            seat_entity.to_model() for seat_entity in extension_seats
-        ]
+    def extend_reservation(
+        self, reservation_id: int, extension_duration: int
+    ) -> Reservation:
+        """Method to extend the end time of a reservation.
 
-        # Assuming seat_availability is a method that checks seat availability within a time range.
-        extension_seat_availability = self.seat_availability(
-            extension_seats_models, extension_time_range
+        Args:
+            reservation_id (int): The integer id of an active reservation.
+            extension_duration (int): The amount of time to extend the reservation by, in minutes.
+        
+        Returns:
+            Reservation - the current reservation, updated with an extended time.
+        
+        Raises:
+            ResourceNotFoundException: if the id parameter does not match an active reservation.
+            ReservationException: if the proposed extension would run past operating hours or overlap
+             with another student's reservation.
+        """
+        entity = self._session.get(ReservationEntity, reservation_id)
+        if entity is None:
+            raise ResourceNotFoundException(
+                f"Reservation with ID {reservation_id} not found."
+            )
+
+        if extension_duration <= 0:
+            raise ReservationException("Extension amount must be positive.")
+
+        proposedRange = TimeRange(
+            start=entity.end, end=entity.end + timedelta(minutes=extension_duration)
         )
-
-        # Check if the original seat is present in the available seats for extension.
-        original_seat_present = any(
-            original_seat.to_model() in extension_seats_models
-            for original_seat in entity.seats
-        )
-
-        if extension_seat_availability:
-            return 60
-        else:
-            return 0
+        if not self.is_colab_open(proposedRange):
+            raise ReservationException(
+                "Extension must be within operating hours of XL Lab."
+            )
+        currentSeats = entity.seats
+        seatModels: List[Seat] = []
+        for seat in currentSeats:
+            seatModels.append(seat.to_model())
+        reservedseats = self.get_seat_reservations(seatModels, proposedRange)
+        if len(reservedseats) != 0:
+            raise ReservationException(
+                "Extension overlaps with another student's reservation."
+            )
+        entity.end = entity.end + timedelta(minutes=extension_duration)
+        self._session.commit()
+        return entity.to_model()

@@ -1,43 +1,52 @@
 <mat-card appearance="outlined">
   <!-- Card Header -->
   <ng-container [ngSwitch]="reservation.state">
+    <!-- Draft Reservation Header -->
     <mat-card-header *ngSwitchCase="'DRAFT'">
       <mat-card-title>Confirm Reservation Details</mat-card-title>
     </mat-card-header>
 
+    <!-- Confirmed Reservation Header -->
     <mat-card-header *ngSwitchCase="'CONFIRMED'">
-      <mat-card-title
-        >Reservation #{{ reservation.id }} Confirmed</mat-card-title
-      >
-      <mat-card-subtitle
-        >See the XL Ambassador staffing the front desk to
-        check-in.</mat-card-subtitle
-      >
+      <mat-card-title>
+        Reservation #{{ reservation.id }} Confirmed
+      </mat-card-title>
+      <mat-card-subtitle>
+        See the XL Ambassador staffing the front desk to check-in.
+      </mat-card-subtitle>
     </mat-card-header>
 
+    <!-- Checked In Header -->
     <mat-card-header *ngSwitchCase="'CHECKED_IN'">
       <mat-card-title>You're Checked In!</mat-card-title>
-      <mat-card-subtitle
-        >See the XL Ambassador if you need anything. When you're done, just
-        press the Check Out button or check out with the XL Ambassador.
+      <mat-card-subtitle>
+        See the XL Ambassador if you need anything. When you're done, just press
+        the Check Out button or check out with the XL Ambassador.
         <br /><br />
-        Changing seats? Please check out and check back in.</mat-card-subtitle
-      >
-      <mat-card-footer style="white-space: nowrap">
-        <strong class="material-icons" style="color: rgb(39, 136, 205)"
-          >schedule</strong
-        >
-        <span id="hours"> {{ remainingTime.hours }} Hrs </span>
-        <span id="minutes"> {{ remainingTime.minutes }} Mins </span>
-        <span id="seconds"> {{ remainingTime.seconds }} Sec</span>
+        Changing seats? Please check out and check back in.
+      </mat-card-subtitle>
+      <mat-card-footer>
+        <div style="display: flex; align-items: center; white-space: nowrap">
+          <strong
+            class="material-icons"
+            style="color: rgb(39, 136, 205); margin-right: 8px">
+            schedule
+          </strong>
+          <span>
+            {{ remainingTime.hours }} Hrs {{ remainingTime.minutes }} Mins
+            {{ remainingTime.seconds }} Sec
+          </span>
+        </div>
       </mat-card-footer>
     </mat-card-header>
 
+    <!-- Checked Out Header -->
     <mat-card-header *ngSwitchCase="'CHECKED_OUT'">
       <mat-card-title>Thanks for visiting!</mat-card-title>
       <mat-card-subtitle>You're all checked out.</mat-card-subtitle>
     </mat-card-header>
 
+    <!-- Cancelled Reservation Header -->
     <mat-card-header *ngSwitchCase="'CANCELLED'">
       <mat-card-title>Reservation Cancelled</mat-card-title>
       <mat-card-subtitle></mat-card-subtitle>
@@ -46,10 +55,12 @@
 
   <!-- Card Content -->
   <mat-card-content>
-    <h3>
-      <span class="material-icons" style="color: rgb(39, 136, 205)"
-        >person</span
-      >
+    <!-- User Information -->
+    <!-- First and Last Name -->
+    <h3 class="user-name">
+      <span class="material-icons" style="color: rgb(39, 136, 205)">
+        person
+      </span>
       <strong>
         {{ reservation.users[0].first_name }}
         {{ reservation.users[0].last_name }}
@@ -57,39 +68,105 @@
     </h3>
     <mat-divider />
 
-    <h3>
-      <span class="material-icons" style="color: rgb(39, 136, 205)"
-        >calendar_today</span
-      >
-      <strong>
-        {{ reservation.start | date: 'shortTime' }} until
-        {{ reservation.end | date: 'shortTime' }}
-      </strong>
-    </h3>
+    <!-- Seat and Location Information -->
+    <div class="horizontal-container">
+      <!-- Seat Number(s) -->
+      <div class="seat">
+        <h3>
+          <span class="material-icons" style="color: rgb(39, 136, 205)">
+            computer
+          </span>
+          <strong>{{ reservation.seats[0].title }}</strong>
+        </h3>
+      </div>
 
-    <p *ngIf="reservation.state === 'CONFIRMED'">
-      Check-in between {{ reservation.start | date: 'shortTime' }} and
-      {{ checkinDeadline(reservation.start) | date: 'shortTime' }} to avoid
-      cancellation.
-    </p>
+      <!-- Spacer -->
+      <div class="spacer"></div>
+
+      <!-- Location -->
+      <div class="location">
+        <h3>
+          <span class="material-icons" style="color: rgb(39, 136, 205)">
+            apartment
+          </span>
+          <strong>The XL Colab in Sitterson 156</strong>
+        </h3>
+      </div>
+    </div>
     <mat-divider />
 
-    <h3>
-      <span class="material-icons" style="color: rgb(39, 136, 205)"
-        >computer</span
-      >
-      <strong>{{ reservation.seats[0].title }}</strong>
-    </h3>
-    <mat-divider />
+    <!-- Time and Extension Information -->
+    <div class="horizontal-flex-container">
+      <!-- Container for Start/End Time and Extension Eligibility -->
+      <div class="time-and-extension">
+        <!-- Start and End Time -->
+        <div class="time-display">
+          <h3>
+            <span class="material-icons" style="color: rgb(39, 136, 205)">
+              calendar_today
+            </span>
+            <strong>
+              {{ formatReservationTimes(reservation.start, reservation.end) }}
+            </strong>
+          </h3>
+          <!-- Check-In Message (Visible for CONFIRMED state) -->
+          <mat-card-subtitle
+            *ngIf="reservation.state === 'CONFIRMED'"
+            style="margin-left: 32px">
+            Check-in between
+            {{ reservation.start | date: 'shortTime' }} and
+            {{ checkinDeadline(reservation.start) | date: 'shortTime' }} to
+            avoid cancellation.
+          </mat-card-subtitle>
+        </div>
 
-    <h3>
-      <span class="material-icons" style="color: rgb(39, 136, 205)"
-        >apartment</span
-      >
-      <strong>The XL Colab in Sitterson 156</strong>
-    </h3>
+        <!-- Extension Eligibility Message and Dropdown -->
+        <div
+          *ngIf="thirtyMinutesLeft && eligibleForExtension && extendPressed"
+          class="extension-options">
+          <div class="flex-container">
+            <span class="icon">
+              <span class="material-icons" style="color: rgb(39, 136, 205)">
+                alarm_add
+              </span>
+            </span>
+            <strong class="text">Extend by</strong>
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>minutes</mat-label>
+              <mat-select #extendAmountElement>
+                <mat-option
+                  *ngFor="let interval of getExtensionIntervals()"
+                  [value]="interval">
+                  {{ interval }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
 
+        <!-- Not Eligible to Extend Messages (Visible for CONDITIONS) -->
+        <div
+          *ngIf="thirtyMinutesLeft && !eligibleForExtension"
+          class="extension-options">
+          <mat-card-subtitle
+            *ngIf="maxExtendAmount === -1"
+            class="extension-message">
+            Reservation cannot be extended due to operating hours.
+          </mat-card-subtitle>
+
+          <mat-card-subtitle
+            *ngIf="maxExtendAmount === -2"
+            class="extension-message">
+            Reservation cannot be extended because the location is already
+            reserved.
+          </mat-card-subtitle>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Actions -->
     <mat-card-actions align="end" [ngSwitch]="reservation.state">
+      <!-- Actions for DRAFT state -->
       <ng-container *ngSwitchCase="'DRAFT'">
         <button mat-stroked-button type="submit" (click)="cancel()">
           Cancel
@@ -104,12 +181,14 @@
         </button>
       </ng-container>
 
+      <!-- Actions for CONFIRMED state -->
       <ng-container *ngSwitchCase="'CONFIRMED'">
         <button mat-stroked-button type="submit" (click)="cancel()">
           Cancel
         </button>
       </ng-container>
 
+      <!-- Actions for CHECKED_IN state -->
       <ng-container *ngSwitchCase="'CHECKED_IN'">
         <button
           mat-stroked-button
@@ -119,21 +198,30 @@
           Check Out
         </button>
         <button
-          *ngIf="thirtyMinutesLeft"
+          *ngIf="thirtyMinutesLeft && !extendPressed"
           [disabled]="!eligibleForExtension"
           [style.background-color]="
             eligibleForExtension ? 'rgb(39, 136, 205)' : 'rgb(0, 0, 0, 0)'
           "
           mat-stroked-button
-          [routerLink]="[
-            '/coworking/reservation/',
-            reservation.id,
-            'extension'
-          ]">
+          (click)="extendPressed = true"
+          style="margin-left: 10px">
           Extend
+        </button>
+        <button
+          *ngIf="thirtyMinutesLeft && extendPressed"
+          [disabled]="!eligibleForExtension"
+          [style.background-color]="
+            eligibleForExtension ? 'rgb(39, 136, 205)' : 'rgb(0, 0, 0, 0)'
+          "
+          (click)="extend()"
+          mat-stroked-button
+          style="margin-left: 10px">
+          Confirm Extension
         </button>
       </ng-container>
 
+      <!-- Actions for CHECKED_OUT and CANCELLED states -->
       <ng-container *ngSwitchCase="'CHECKED_OUT'">
         <button
           mat-stroked-button

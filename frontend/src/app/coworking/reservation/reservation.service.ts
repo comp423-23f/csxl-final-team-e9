@@ -47,9 +47,9 @@ export class ReservationService {
     );
   }
 
-  getExtensionEligibility(reservationId: number): Observable<boolean> {
-    let endpoint = `/api/coworking/reservation/${reservationId}/extension-eligibility`;
-    return this.http.get<boolean>(endpoint);
+  getMaxExtensionTime(reservationId: number): Observable<number> {
+    let endpoint = `/api/coworking/reservation/${reservationId}/max-extension`;
+    return this.http.get<number>(endpoint);
   }
 
   cancel(reservation: Reservation) {
@@ -88,6 +88,21 @@ export class ReservationService {
       tap((reservation) => {
         let rxReservation = this.getRxReservation(reservation.id);
         rxReservation.set(reservation);
+      })
+    );
+  }
+
+  extend(reservation: Reservation, extensionAmount: number) {
+    let endpoint = `/api/coworking/reservation/${reservation.id}/extend`;
+    let payload = {
+      id: reservation.id,
+      extension_duration: extensionAmount
+    };
+    return this.http.put<ReservationJSON>(endpoint, payload).pipe(
+      map(parseReservationJSON),
+      tap((updatedReservation) => {
+        let rxReservation = this.getRxReservation(updatedReservation.id);
+        rxReservation.set(updatedReservation);
       })
     );
   }

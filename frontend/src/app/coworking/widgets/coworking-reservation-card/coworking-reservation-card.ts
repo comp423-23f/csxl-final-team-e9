@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Reservation } from '../../coworking.models';
-import { Observable, interval, map, mergeMap, shareReplay, timer } from 'rxjs';
+import { Observable, map, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { ReservationService } from '../../reservation/reservation.service';
-import { ExtensionService } from '../../reservation/extension/extension.service';
 import { timeComponents } from './timeComponents';
+import { formatDate } from '@angular/common';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'coworking-reservation-card',
@@ -13,16 +14,19 @@ import { timeComponents } from './timeComponents';
 })
 export class CoworkingReservationCard implements OnInit {
   @Input() reservation!: Reservation;
+  @ViewChild('extendAmountElement') extendAmount!: MatSelect;
 
   public draftConfirmationDeadline$!: Observable<string>;
   public remainingTime: timeComponents = { hours: 0, minutes: 0, seconds: 0 };
   public thirtyMinutesLeft: boolean = false;
   public eligibleForExtension: boolean = false;
+  public extendPressed: boolean = false;
+  private hasExtendReloaded: boolean = false;
+  public maxExtendAmount: number = 0;
 
   constructor(
     public router: Router,
-    public reservationService: ReservationService,
-    public extensionService: ExtensionService
+    public reservationService: ReservationService
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +41,12 @@ export class CoworkingReservationCard implements OnInit {
           this.remainingTime = this.secondsToTimeComponent(data);
         });
     }
+    setInterval(() => {
+      if (this.thirtyMinutesLeft && !this.hasExtendReloaded) {
+        window.location.reload();
+        this.hasExtendReloaded = true;
+      }
+    }, 60000);
   }
 
   checkinDeadline(reservationStart: Date): Date {
@@ -55,9 +65,13 @@ export class CoworkingReservationCard implements OnInit {
     this.reservationService.checkout(this.reservation).subscribe();
   }
 
-  /*extend() {
-    this.extensionService.extend(this.reservation).subscribe();
-  }*/
+  extend() {
+    this.reservationService
+      .extend(this.reservation, this.extendAmount.value)
+      .subscribe();
+    window.location.reload();
+    this.hasExtendReloaded = false;
+  }
 
   private initDraftConfirmationDeadline(): Observable<string> {
     const fiveMinutes =
@@ -93,12 +107,38 @@ export class CoworkingReservationCard implements OnInit {
     if (totalSeconds / 60 <= 30) {
       this.thirtyMinutesLeft = true;
       this.reservationService
-        .getExtensionEligibility(this.reservation.id)
+        .getMaxExtensionTime(this.reservation.id)
         .subscribe((data) => {
-          this.eligibleForExtension = data;
-          console.log(data);
+          this.maxExtendAmount = data;
+          this.eligibleForExtension = data > 0;
         });
     }
     return { seconds, minutes, hours };
+  }
+
+  getExtensionIntervals(): number[] {
+    let intervals = [];
+    for (let i = 15; i <= this.maxExtendAmount; i += 15) {
+      intervals.push(i);
+    }
+    return intervals;
+  }
+
+  formatReservationTimes(start: Date, end: Date): string {
+    const startTime = this.formatTime(start);
+    const endTime = this.formatTime(end);
+
+    if (
+      (startTime.endsWith('AM') && endTime.endsWith('AM')) ||
+      (startTime.endsWith('PM') && endTime.endsWith('PM'))
+    ) {
+      return `${startTime.slice(0, -3)} - ${endTime}`;
+    }
+
+    return `${startTime} - ${endTime}`;
+  }
+
+  private formatTime(date: Date): string {
+    return formatDate(date, 'shortTime', 'en-US');
   }
 }

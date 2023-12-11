@@ -1,6 +1,6 @@
 # Technical Specification
 
-> _Last Updated: 11/19/2023_
+> Authors: <br>Isha Atre (https://github.com/Ishaatre) <br>Chloe Carroll (https://github.com/chloeecarroll) <br>Lauren Jones (https://github.com/laurennnjones) <br>Soumya Mahavadi (https://github.com/ssmahavadi) <br>_Last Updated: 12/06/2023_
 
 ## 1. Descriptions and sample data representations of new or modified model representation(s) and API routes
 
