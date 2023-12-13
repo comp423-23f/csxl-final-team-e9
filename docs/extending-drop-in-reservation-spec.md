@@ -1,6 +1,6 @@
 # Technical Specification
 
-> Authors: <br>Isha Atre (https://github.com/Ishaatre) <br>Chloe Carroll (https://github.com/chloeecarroll) <br>Lauren Jones (https://github.com/laurennnjones) <br>Soumya Mahavadi (https://github.com/ssmahavadi) <br>_Last Updated: 12/06/2023_
+> Authors: <br>Isha Atre (https://github.com/Ishaatre) <br>Chloe Carroll (https://github.com/chloeecarroll) <br>Lauren Jones (https://github.com/laurennnjones) <br>Soumya Mahavadi (https://github.com/ssmahavadi) <br>_Last Updated: 12/12/2023_
 
 ## 1. Descriptions and sample data representations of new or modified model representation(s) and API routes
 
@@ -26,7 +26,7 @@ When deciding how to differentiate between when a user can and cannot extend, we
 
 ## 4. Development Concerns
 
-Most of the changes made to implement Stories A and B have been made in the following files:
+Most of the changes made to implement this feature have been made in the following files:
 
 1. backend/services/coworking/reservation.py
 2. frontend/src/app/coworking/reservation/reservation.service.ts
@@ -35,7 +35,11 @@ Most of the changes made to implement Stories A and B have been made in the foll
 1 contains methods to draft, cancel, update reservations. It also has methods to retrieve the state of the CSXL at a given time. 2 contains API routes for the reservation component. 3 contains most of our frontend changes including new icons and buttons. Understanding how to manipulate reservation objects is crucial for understanding how to extend them.
 
 ![Checked In](images/checkedin.jpg)
+Once a user has made a reservation and been checked in by an ambassador, they can see the time remaining on their reservation. Additionally, they see updated icons for the location, time, and user associated with their reservation.
 ![Able to Extend](images/canextend.jpg)
+If they are within 30 minutes of the end of their reservation, and are elibigle to extend, they see an active blue Extend button.
 ![After Clicking Extend](images/emptydropdownfield.jpg)
+Clicking on the Extend button causes a dropdown menu to appear for the amount of time they'd like to extend by.
 ![After Clicking In Dropdown](images/viewintervals.jpg)
-![Unable to Extend](images/cantextend.jpg)
+![Unable to Extend](images/can'textend.jpg)
+If I user cannot extend at least 15 minutes, they see a deactivated grey button as well as a message describing why they can't extend, either due to operating hours or an overlapping reservation with another user.
