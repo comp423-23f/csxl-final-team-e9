@@ -33,3 +33,9 @@ Most of the changes made to implement Stories A and B have been made in the foll
 3. frontend/src/app/coworking/widgets/coworking-reservation-card/coworking-reservation-card.html
 
 1 contains methods to draft, cancel, update reservations. It also has methods to retrieve the state of the CSXL at a given time. 2 contains API routes for the reservation component. 3 contains most of our frontend changes including new icons and buttons. Understanding how to manipulate reservation objects is crucial for understanding how to extend them.
+
+![Checked In](images/checkedin.jpg)
+![Able to Extend](images/canextend.jpg)
+![After Clicking Extend](images/emptydropdownfield.jpg)
+![After Clicking In Dropdown](images/viewintervals.jpg)
+![Unable to Extend](images/cantextend.jpg)
